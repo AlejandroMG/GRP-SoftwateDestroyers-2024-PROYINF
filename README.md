@@ -1,4 +1,4 @@
-# Grupo Software Destroyers
+# Grupo SoftwareDestroyers
 
 Integrantes:  
 * Alejandro Fierro - 202173600-k  
