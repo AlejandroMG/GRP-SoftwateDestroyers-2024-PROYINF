@@ -8,4 +8,5 @@ Integrantes:
 ## Wiki
 Podrá acceder a la wiki mediante el siguiente [enlace](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/wiki)  
 
+Prototipo de Interfaz:  
 ![alt text](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/blob/main/Prototipo.png)
