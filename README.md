@@ -6,4 +6,6 @@ Integrantes:
 * Jorge Toro - 202173613-1  
 * Nicolas Horta - 202173532-1  
 ## Wiki
-Podrá acceder a la wiki mediante el siguiente [enlace](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/wiki)
+Podrá acceder a la wiki mediante el siguiente [enlace](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/wiki)  
+
+![alt text](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/blob/main/Prototipo.png)
