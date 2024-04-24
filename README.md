@@ -16,7 +16,8 @@ Hito 2:
 * Pasos para llevar a cabo la creacion del prototipo propuesto.
 
 ## Prototipo de Interfaz:  
-![alt text](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/blob/main/Prototipo.pdf)
+[Prototipo](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/blob/main/Prototipo.pdf)
+
 
 ## Plan para llevar a cabo el prototipo
 
