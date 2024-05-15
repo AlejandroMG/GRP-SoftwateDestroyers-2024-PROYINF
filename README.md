@@ -15,6 +15,9 @@ Hito 2:
 * Presentacion de prototipo no funcional de la aplicacion
 * Pasos para llevar a cabo la creacion del prototipo propuesto.
 
+Hito 3:
+* Las historias de usuario HU-100 y HU-300 fueron editadas para seguir el formato indicado.
+
 ## Prototipo de Interfaz:  
 [Prototipo](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/blob/main/Prototipo.pdf)
 
