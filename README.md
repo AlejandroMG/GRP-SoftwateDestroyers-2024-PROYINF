@@ -17,6 +17,9 @@ Hito 2:
 
 Hito 3:
 * Las historias de usuario HU-100 y HU-300 fueron editadas para seguir el formato indicado.
+* Se agregan los tres diagramas de secuencias correspondientes a las HU en la seccion Diagramas de secuencia de la wiki.
+* Se agrega un apartado explicando como aplicar el patrón MVC en el proyecto.
+* Se incluye código en python usando tkinter y pydicom para abrir una imagen aplicando MVC.
 
 ## Prototipo de Interfaz:  
 [Prototipo](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/blob/main/Prototipo.pdf)
