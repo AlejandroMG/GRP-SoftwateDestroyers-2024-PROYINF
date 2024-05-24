@@ -4,3 +4,11 @@ de los archivos y para la vista se usa tkinter.
 Actualmente se puede seleccionar una imagen tipo dicom y ésta extraerá la fecha.
 Para ejecutar el programa, se debe ejecutar el archivo main.py. 
 python main.py
+
+
+
+Librerias a instalar previamente:
+(pip install <nombre>)
+Numpy
+Pillow
+pydicom
