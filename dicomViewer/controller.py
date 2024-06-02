@@ -5,7 +5,7 @@ from view import DicomView
 from PIL import Image
 import tkinter as tk
 
-
+# Etiqueta: Hito-4
 class DicomController:
     def __init__(self):
         self.model = DicomModel()
