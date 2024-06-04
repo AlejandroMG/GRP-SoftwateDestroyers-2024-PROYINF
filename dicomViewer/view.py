@@ -14,10 +14,15 @@ class DicomView(tk.Tk):
         self.folder_path = None  # Añadir atributo folder_path
         self._create_widgets()
 
+    def show_info(self, text):
+        self.info_label.config(text=text)
+
     def _create_widgets(self):
         # Frame superior para filtros
         filter_frame = tk.Frame(self, bg="#303030")
         filter_frame.pack(side=tk.TOP, fill=tk.X, pady=10, padx=10)
+
+        
 
         # Barra de búsqueda
         tk.Label(filter_frame, text="Barra de búsqueda", bg="#303030", fg="#ffffff", font=("Helvetica", 12)).pack(side=tk.LEFT, padx=5)
@@ -52,6 +57,11 @@ class DicomView(tk.Tk):
         # Frame para previsualización
         preview_frame = tk.Frame(middle_frame, bg="#303030")
         preview_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10)
+        #ACTUALIZACIÓN
+        # Botón para mostrar la cabecera DICOM
+        
+        self.show_header_button = tk.Button(preview_frame, text="Mostrar Cabecera DICOM", command=self.controller.show_dicom_header, bg="#007bff", fg="#ffffff", font=("Helvetica", 14))
+        self.show_header_button.pack(side=tk.BOTTOM, pady=10)
 
         # Previsualización de la imagen
         tk.Label(preview_frame, text="Previsualización", bg="#303030", fg="#ffffff", font=("Helvetica", 12)).pack(pady=5)
@@ -66,15 +76,42 @@ class DicomView(tk.Tk):
         self.open_button = tk.Button(self, text="Abrir carpeta DICOM", command=self.controller.open_dicom_folder, bg="#007bff", fg="#ffffff", font=("Helvetica", 14))
         self.open_button.pack(side=tk.BOTTOM, pady=10)
 
+        
+
     def show_image(self, image):
         tk_image = ImageTk.PhotoImage(image)
         self.image_label.config(image=tk_image)
         self.image_label.image = tk_image
+
+    #ACTUALIZACIÓN
+    def show_dicom_header_window(self, dicom_header):
+        if dicom_header:
+            # Crear una nueva ventana toplevel para la cabecera DICOM
+            header_window = tk.Toplevel(self)
+            header_window.title("Cabecera DICOM")
+
+            header_window.geometry("640x480")
+
+            # Crear un frame para la cabecera DICOM
+            header_frame = tk.Frame(header_window, bg="white", bd=2, relief=tk.RIDGE)
+            header_frame.pack(padx=30, pady=30, fill=tk.BOTH, expand=True)
+
+            # Crear un Treeview para mostrar la cabecera DICOM
+            columns = ("Tag", "Valor")
+            tree = ttk.Treeview(header_frame, columns=columns, show="headings", height=10)
+            tree.heading("Tag", text="Tag")
+            tree.heading("Valor", text="Valor")
+            tree.pack(fill=tk.BOTH, expand=True)
+
+            # Llenar el Treeview con la cabecera DICOM
+            for tag, value in dicom_header.items():
+                tree.insert("", tk.END, values=(tag, value))
 
     def open_folder_dialog(self):
         folder_path = filedialog.askdirectory(title="Selecciona una carpeta que contenga archivos DICOM")
         self.folder_path = folder_path  # Actualizar folder_path
         return folder_path
 
-    def show_info(self, text1):
-        self.info_label.config(text=text1)
+
+
+    

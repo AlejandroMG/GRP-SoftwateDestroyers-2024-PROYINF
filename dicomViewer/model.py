@@ -15,3 +15,4 @@ class DicomModel:
 
     def get_image(self):
         return self.image
+    
