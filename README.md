@@ -21,6 +21,10 @@ Hito 3:
 * Se agrega un apartado explicando como aplicar el patrón MVC en el proyecto.
 * Se incluye código en python usando tkinter y pydicom para abrir una imagen aplicando MVC.
 
+Hito 4:
+* Se modifica view.py para actualizar la vista de la aplicación.
+* Se modifica controller.py para avanzar en los requisitos funcionales de la aplicación.
+
 ## Prototipo de Interfaz:  
 [Prototipo](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/blob/main/Prototipo.pdf)
 
