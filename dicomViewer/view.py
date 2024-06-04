@@ -57,7 +57,7 @@ class DicomView(tk.Tk):
         # Frame para previsualización
         preview_frame = tk.Frame(middle_frame, bg="#303030")
         preview_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10)
-        #ACTUALIZACIÓN
+
         # Botón para mostrar la cabecera DICOM
         
         self.show_header_button = tk.Button(preview_frame, text="Mostrar Cabecera DICOM", command=self.controller.show_dicom_header, bg="#007bff", fg="#ffffff", font=("Helvetica", 14))
@@ -83,7 +83,7 @@ class DicomView(tk.Tk):
         self.image_label.config(image=tk_image)
         self.image_label.image = tk_image
 
-    #ACTUALIZACIÓN
+
     def show_dicom_header_window(self, dicom_header):
         if dicom_header:
             # Crear una nueva ventana toplevel para la cabecera DICOM
