@@ -49,7 +49,7 @@ class DicomController:
     def mostrar_info(self,var):
         self.view.show_info(f": {var}")
 
-    #ACTUALIZACIÓN
+
     def select_dicom_file(self, event):
         selected_item = self.view.tree.selection()
         if selected_item:
@@ -81,7 +81,7 @@ class DicomController:
         return self.original_image
 
 
-    #ACTUALIZACIÓN
+
     def show_dicom_header(self):
         try:
             # Obtener la cabecera DICOM del archivo seleccionado
