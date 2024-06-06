@@ -2,7 +2,7 @@ import os
 import pydicom               
 from model import DicomModel
 from view import DicomView
-from PIL import Image
+from PIL import Image, ImageTk
 import tkinter as tk
 from tkinter import ttk
 
@@ -96,4 +96,17 @@ class DicomController:
             self.view.show_dicom_header_window(dicom_header)
         except Exception as e:
                 print(f"Error al cargar la cabecera DICOM: {e}")
+
+    def show_full_image(self):
+        if self.original_image:
+            full_image_window = tk.Toplevel(self.view)
+            full_image_window.title("Imagen Completa")
+
+            # Convert the image to a Tkinter-compatible image
+            tk_image = ImageTk.PhotoImage(self.original_image)
+
+            # Create a label to display the image
+            image_label = tk.Label(full_image_window, image=tk_image)
+            image_label.image = tk_image  # Keep a reference to avoid garbage collection
+            image_label.pack(fill=tk.BOTH, expand=True)
 
