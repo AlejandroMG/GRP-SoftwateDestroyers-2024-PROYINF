@@ -58,6 +58,11 @@ class DicomView(tk.Tk):
         preview_frame = tk.Frame(middle_frame, bg="#303030")
         preview_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=10)
 
+
+        # Botón para ver imagen en una nueva ventana
+        self.view_image_button = tk.Button(preview_frame, text="Ver Imagen", command=self.controller.show_full_image, bg="#007bff", fg="#ffffff", font=("Helvetica", 14))
+        self.view_image_button.pack(pady=10)
+
         # Botón para mostrar la cabecera DICOM
         
         self.show_header_button = tk.Button(preview_frame, text="Mostrar Cabecera DICOM", command=self.controller.show_dicom_header, bg="#007bff", fg="#ffffff", font=("Helvetica", 14))
@@ -111,7 +116,3 @@ class DicomView(tk.Tk):
         folder_path = filedialog.askdirectory(title="Selecciona una carpeta que contenga archivos DICOM")
         self.folder_path = folder_path  # Actualizar folder_path
         return folder_path
-
-
-
-    
