@@ -22,6 +22,7 @@ Hito 3:
 * Se incluye código en python usando tkinter y pydicom para abrir una imagen aplicando MVC.
 
 Hito 4:
+* [Video que explica el prototipo y las herramientas presentas en esta etapa del proyecto.](https://youtu.be/cYpdwSHEkKQ?si=yuYDyYhLn9fewXb7)
 * Se modifica view.py para actualizar la vista de la aplicación.
 * Se modifica controller.py para avanzar en los requisitos funcionales de la aplicación.
 
