@@ -26,6 +26,12 @@ Hito 4:
 * Se modifica view.py para actualizar la vista de la aplicación.
 * Se modifica controller.py para avanzar en los requisitos funcionales de la aplicación.
 
+Hito 5:
+* [Video que presenta la version final del prototipo que contempla este proyecto]()
+* .
+* Se agrega en la Wiki la seccion de Servicios, donde se explica el servicio elegido y como se integraria a nuestro proyecto (basado en lo que se ha trabajado).
+* Se incluye en la Wiki la seccion de Resultados Finales, donde evaluamos lo desarrollado a traves del semestre en base a los objetivos propuestos, lo solicitado por el cliente y las historias de usuario.
+
 ## Prototipo de Interfaz:  
 [Prototipo](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/blob/main/Prototipo.pdf)
 
