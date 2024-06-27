@@ -27,8 +27,8 @@ Hito 4:
 * Se modifica controller.py para avanzar en los requisitos funcionales de la aplicación.
 
 Hito 5:
-* [Video que presenta la version final del prototipo que contempla este proyecto]()
-* .
+* [Video que presenta la version final del prototipo que contempla este proyecto](https://youtu.be/NUm9g1kGv4A)
+* Modificaciones del código del prototipo final: se implementa la busqueda con filtros. Se puede filtrar por nombre de archivos, id del paciente y fechas de los estudios.
 * Se agrega en la Wiki la seccion de Servicios, donde se explica el servicio elegido y como se integraria a nuestro proyecto (basado en lo que se ha trabajado).
 * Se incluye en la Wiki la seccion de Resultados Finales, donde evaluamos lo desarrollado a traves del semestre en base a los objetivos propuestos, lo solicitado por el cliente y las historias de usuario.
 
