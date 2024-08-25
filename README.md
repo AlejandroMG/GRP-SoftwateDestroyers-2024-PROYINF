@@ -13,9 +13,7 @@ Visualizador de imágenes DICOM, barra de búsqueda.
 Evaluaremos el estado de nuestro proyecto a partir de los Alphas básicos:  
 
 ## Stakeholders:
-* Reconocidos  
-* En acuerdo    
-* Involucrados  
+![En acuerdo](images/stakeholders.png)
 ## Oportunidad:  
 * Identificada  
 * Solucion propuesta  
