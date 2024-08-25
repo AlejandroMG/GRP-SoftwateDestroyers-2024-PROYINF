@@ -15,14 +15,9 @@ Evaluaremos el estado de nuestro proyecto a partir de los Alphas básicos:
 ## Stakeholders:
 ![En acuerdo](images/stakeholders.png)
 ## Oportunidad:  
-* Identificada  
-* Solucion propuesta  
-* Evaluada  
-* Aprobada      
+![ingre](images/Oportunidades.png)
 ## Sistema de Software:  
-* Arquitectura seleccionada   
-* Usable   
-* Listo  
+![ingre](images/softwaresystem.png)
 ## Trabajo:  
 * Inicializado  
 * Preparado  
