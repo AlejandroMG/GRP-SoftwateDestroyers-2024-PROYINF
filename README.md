@@ -21,10 +21,7 @@ Evaluaremos el estado de nuestro proyecto a partir de los Alphas básicos:
 ## Trabajo:  
 ![ingre](images/work.png)
 ## Forma de Trabajo:  
-* Principios establecidos  
-* Bases establecidas  
-* En uso  
-* Trabajando excelente  
+![ingre](images/wayworking.png)
 
 ## Equipo:  
 ![ingre](images/team.png)
