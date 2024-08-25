@@ -28,6 +28,7 @@ Probabilidad de ocurrencia: Media
 Medidas de mitigación: Establecer un proceso estándar de implementación de cambios y asegurar la alineación con los stakeholders antes de implementar cualquier cambio.  
 
 * **Riesgo 2**: Vulnerabilidad de la seguridad del software  
-Objetivo afectado: Confidencialidad y seguridad de los datos.  
+Objetivo afectado: Confidencialidad y seguridad de los datos.
+Impacto: Muy alto  
 Probabilidad de ocurrencia: Baja  
 Medidas de mitigación: Implementar medidas de seguridad eficientes, realizar revisiones de seguridad regulares y pruebas de vulnerabilidad.  
