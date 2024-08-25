@@ -21,3 +21,7 @@ Evaluaremos el estado de nuestro proyecto a partir de los Alphas básicos:
 
 # Alphas Prioritarios
 # Riesgos Identificados
+*Riesgo 1: Cambios en los requisitos del proyecto
+Objetivo afectado: Alcance del proyecto y estabilidad del diseño
+*Riesgo 2: Vulnerabilidad de la seguridad del software
+Objetivo afectado: Confidencialidad y seguridad de los datos.
