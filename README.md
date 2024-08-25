@@ -19,11 +19,7 @@ Evaluaremos el estado de nuestro proyecto a partir de los Alphas básicos:
 ## Sistema de Software:  
 ![ingre](images/softwaresystem.png)
 ## Trabajo:  
-* Inicializado  
-* Preparado  
-* Comenzado   
-* Bajo control    
-* Concluido  
+![ingre](images/work.png)
 ## Forma de Trabajo:  
 * Principios establecidos  
 * Bases establecidas  
@@ -31,16 +27,9 @@ Evaluaremos el estado de nuestro proyecto a partir de los Alphas básicos:
 * Trabajando excelente  
 
 ## Equipo:  
-* Reconocidos:
-* Conformados:
-* Colaborando:  
+![ingre](images/team.png)
 ## Requisitos:  
-* Concebidos
-* Acotados
-* Coherente  
-* Aceptable
-* Tratado
-* Cumplido  
+![ingre](images/requeriments.png)
 
 # Alphas Prioritarios
 # Riesgos Identificados
