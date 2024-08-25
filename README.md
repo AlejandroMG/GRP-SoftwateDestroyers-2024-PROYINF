@@ -13,22 +13,41 @@ Visualizador de imágenes DICOM, barra de búsqueda.
 Evaluaremos el estado de nuestro proyecto a partir de los Alphas básicos:  
 
 ## Stakeholders:
-* Reconocidos: ...  
-* Representados: ...  
-* Involucrados: blabla   
+* Reconocidos  
+* En acuerdo    
+* Involucrados  
 ## Oportunidad:  
-* Identificada:  
-* Solucion propuesta:  
-* Evaluada:  
-* Aprobada:    
+* Identificada  
+* Solucion propuesta  
+* Evaluada  
+* Aprobada      
 ## Sistema de Software:  
-* Arquitectura seleccionada:  
-* Usable:  
-* Listo:  
+* Arquitectura seleccionada   
+* Usable   
+* Listo  
 ## Trabajo:  
+* Inicializado  
+* Preparado  
+* Comenzado   
+* Bajo control    
+* Concluido  
 ## Forma de Trabajo:  
+* Principios establecidos  
+* Bases establecidas  
+* En uso  
+* Trabajando excelente  
+
 ## Equipo:  
+* Reconocidos:
+* Conformados:
+* Colaborando:  
 ## Requisitos:  
+* Concebidos
+* Acotados
+* Coherente  
+* Aceptable
+* Tratado
+* Cumplido  
 
 # Alphas Prioritarios
 # Riesgos Identificados
