@@ -31,10 +31,14 @@ nuestro equipo ya decidió la forma de trabajo y las herramientas/plataformas qu
 ## Equipo:  
 ![ingre](images/team.png)
 Se considera que nos encontramos en el estado "colaborando" debido a que nuestro grupo es el mismo que el de análisis, tenemos la suficiente experiencia trabajando juntos, teniendo así los principios, bases y responsabilidades bien definidas y existiendo un ambiente colaborativo.  
-## Requisitos:  
+## Requerimientos:  
 ![ingre](images/requeriments.png)
-
+ Ya identificamos la necesidad de la realización de un nuevo sistema que permita el análisis de imágenes médicas, así como sus distintas partes interesadas en ella, a su vez el propósito y el tema del nuevo sistema son claros; sin embargo, aún buscamos seguir trabajando en los distintos requisitos para satisfacer de mejor manera las distintas necesidades planteadas por el cliente abarcando más necesidades de las que ya trabajamos, es por eso que consideramos que está en aceptable.  
 # Alphas Prioritarios
+## Alpha Sistema de Software:  
+Se ha decidido como prioritario este alpha debido a que es el que se encuentra en un estado más bajo en comparación a los siguientes alphas. Además éste punto resulta fundamental, pues hace referencia al software en si mismo, es decir, es nuestro producto final que queremos completar para cumplir con nuestro objetivo. Para poder avanzar al siguiente estado, debemos trabajar en la calidad de nuestro software, es decir, lograr que el sistema al menos pueda resultar útil y que cumpla con los criterios mínimos que nuestro cliente necesita. Para lograr lo anterior también resulta de suma importancia que sea testeado y que los defectos sean en bajo nivel para poder seguir mejorando.  
+## Alpha Stakeholders:  
+Como segundo alpha creemos que debemos mejorar nuestra comunicación con los stakeholders, pues resulta de suma importancia llegar a acuerdos para definir una funcionalidad que cumpla con las caracteristicas requeridas por el cliente y los usuarios y que sea realista a la hora de implementar. Tambien se elije este alpha ya que nos permite mejorar a su vez otros alphas, como el alpha del sistema de software, al ir mejorando nuestra comunicacion, se puede tener una visión mucho más clara del software requerido, avanzando ambos alphas de una forma efectiva y complementaria. Otra ventaja es que si por alguna razón no identificamos algún requerimiento importante, una mayor interacción puede ayudarnos a entender mejor el contexto del problema. Para lograr avanzar al siguiente estado, es necesario realizar más reuniones con los stakeholders, aprender a escucharlos y entenderlos mejor y llegar a acuerdos.  
 # Riesgos Identificados
 * **Riesgo 1**: Cambios en los requisitos del proyecto  
 Objetivo afectado: Alcance del proyecto y estabilidad del diseño  
