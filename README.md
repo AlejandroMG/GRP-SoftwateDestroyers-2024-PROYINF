@@ -9,6 +9,9 @@ Integrantes:
 # Proyecto a trabajar:
 Visualizador de imágenes DICOM, barra de búsqueda.
 
+# Wiki
+Podrá acceder a la wiki mediante el siguiente [enlace](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/wiki)
+
 # Estado del Proyecto
 Evaluaremos el estado de nuestro proyecto a partir de los Alphas básicos:  
 
