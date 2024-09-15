@@ -12,3 +12,6 @@ Visualizador de imágenes DICOM, barra de búsqueda.
 # Wiki
 Podrá acceder a la wiki mediante el siguiente [enlace](https://github.com/AlejandroMG/GRP-SoftwateDestroyers-2024-PROYINF/wiki)
 
+# Hito 2 notas:
+Se ha elejido la historia de usuario:
+<HU-400: Subir imágenes DICOM al sitio web> como HU prioritaria, dentro de ella se puede encontrar su justificación.  
