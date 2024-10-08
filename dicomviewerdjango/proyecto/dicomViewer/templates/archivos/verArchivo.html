@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block titulo %}Archivo DICOM{% endblock %}
+
+{% block contenido %}
+
+<br><br>
+<div class="container mt-6">
+    <div class="row justify-content-center">
+        <!-- Barra lateral izquierda para los filtros -->
+        <div class="col-md-3 text-align: start;">
+            <h4 class="card-title" style="text-align: center;">Filtros</h4>
+            <div class="list-group">
+                <button class="list-group-item list-group-item-action" onclick="applyFilter('grayscale')">Escala de grises</button>
+                <button class="list-group-item list-group-item-action" onclick="applyFilter('invert')">Negativo</button>
+                <button class="list-group-item list-group-item-action" onclick="applyFilter('brightness')">Aumentar brillo</button>
+                <button class="list-group-item list-group-item-action" onclick="applyFilter('contrast')">Aumentar contraste</button>
+                <button class="list-group-item list-group-item-action" onclick="applyFilter('sepia')">Sepia</button>
+                <button class="list-group-item list-group-item-action">
+                    <label for="color-picker">Seleccionar color:</label>
+                    <input type="color" id="color-picker" onchange="applyColorMap()">
+                </button>
+            </div>
+        </div>
+
+        <!-- Columna para la imagen -->
+        <div class="col-md-6 text-center">
+            <h4 class="card-title" style="text-align: center;">Archivo DICOM</h4>
+            <div id="dicom-wrapper" style="position: relative; overflow: hidden; display: inline-block; width: 400px; height: 400px;">
+                <!-- Aquí cambiamos el img por canvas -->
+                <canvas id="dicom-canvas" width="400" height="400" style="width: 100%; height: 100%; object-fit: contain;"></canvas>
+                <div id="color-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+            </div>
+
+            <!-- Botones de movimiento como flechas -->
+            <div class="mt-3" style="display: flex; justify-content: center; gap: 10px;">
+                <button class="btn btn-primary" onclick="moveImage('up')" style="font-size: 1rem; padding: 10px 15px;">↑</button>
+                <button class="btn btn-primary" onclick="moveImage('left')" style="font-size: 1rem; padding: 10px 15px;">←</button>
+                <button class="btn btn-primary" onclick="moveImage('right')" style="font-size: 1rem; padding: 10px 15px;">→</button>
+                <button class="btn btn-primary" onclick="moveImage('down')" style="font-size: 1rem; padding: 10px 15px;">↓</button>
+            </div>
+
+            <!-- Botón para regresar al tamaño original -->
+            <div class="mt-2 text-center">
+                <button class="btn btn-secondary" onclick="resetZoom()" style="font-size: 1rem; padding: 8px 12px;">Retroceder</button>
+            </div>
+        </div>
+
+        <!-- Columna para la información del archivo DICOM -->
+        <div class="col-md-3 text-align: start;">
+            <h4 class="card-title" style="text-align: center;">Información del archivo DICOM</h4>
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Paciente:</strong> {{ dicom_data.patient_name }}</li>
+                <li class="list-group-item"><strong>Estudio:</strong> {{ dicom_data.study_description }}</li>
+                <li class="list-group-item"><strong>Modalidad:</strong> {{ dicom_data.modality }}</li>
+                <li class="list-group-item"><strong>Fecha del Estudio:</strong> {{ dicom_data.study_date }}</li>
+                <li class="list-group-item"><strong>ID del Estudio:</strong> {{ dicom_data.study_id }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Botón para regresar a la lista -->
+    <div class="text-center mt-3">
+        <a class="btn btn-secondary" href="{% url 'archivos' %}">Volver a la lista</a>
+    </div>
+</div>
+
+<!-- JavaScript para aplicar filtros a la imagen -->
+<script>
+    const dicomCanvas = document.getElementById('dicom-canvas');
+    const ctx = dicomCanvas.getContext('2d');
+    const image = new Image();
+    image.src = 'data:image/png;base64,{{ img_data }}';  // Usa tu imagen base64 aquí
+
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    image.onload = function() {
+        ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
+    };
+
+    // Zoom con scroll
+    dicomCanvas.addEventListener('wheel', function(e) {
+        e.preventDefault();
+
+        // Cambiar la escala basada en el scroll
+        if (e.deltaY < 0) {
+            scale *= 1.1; // Zoom in
+        } else {
+            scale /= 1.1; // Zoom out
+        }
+
+        // Asegurarse de que la escala esté en un rango razonable
+        const minScale = 1; // Escala mínima
+        const maxScale = 5; // Escala máxima
+        scale = Math.min(Math.max(scale, minScale), maxScale);
+
+        // Redibujar la imagen escalada
+        ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
+        ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
+    });
+
+    // Función para mover la imagen
+    function moveImage(direction) {
+        const step = 20; // Ajustar el paso de movimiento
+        switch (direction) {
+            case 'down':
+                offsetY -= step;
+                break;
+            case 'up':
+                offsetY += step;
+                break;
+            case 'right':
+                offsetX -= step;
+                break;
+            case 'left':
+                offsetX += step;
+                break;
+        }
+
+        // Redibujar la imagen con la nueva posición
+        ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
+        ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
+    }
+
+    // Función para resetear el zoom y la posición de la imagen
+    function resetZoom() {
+        scale = 1;
+        offsetX = 0;
+        offsetY = 0;
+
+        // Redibujar la imagen con el zoom y posición originales
+        ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
+        ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
+    }
+
+    // Función para aplicar los filtros
+    function applyFilter(filter) {
+        switch (filter) {
+            case 'grayscale':
+                dicomCanvas.style.filter = 'grayscale(100%)'; // Aplicar escala de grises
+                break;
+            case 'invert':
+                dicomCanvas.style.filter = 'invert(100%)'; // Aplicar negativo
+                break;
+            case 'brightness':
+                dicomCanvas.style.filter = 'brightness(150%)'; // Aumentar brillo
+                break;
+            case 'contrast':
+                dicomCanvas.style.filter = 'contrast(150%)'; // Aumentar contraste
+                break;
+            case 'sepia':
+                dicomCanvas.style.filter = 'sepia(100%)'; // Aplicar sepia
+                break;
+            default:
+                dicomCanvas.style.filter = 'none'; // Sin filtro
+        }
+    }
+
+    // Función para aplicar un mapa de color personalizado
+    function applyColorMap() {
+        const colorPicker = document.getElementById('color-picker').value;
+        const overlay = document.getElementById('color-overlay');
+        overlay.style.backgroundColor = colorPicker; // Aplicar el color seleccionado
+        overlay.style.opacity = '0.5'; // Ajustar la transparencia
+    }
+</script>
+
+{% endblock %}

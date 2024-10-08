@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block titulo %}Lista de archivos Dicom{% endblock %}
+
+{% block contenido  %}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <a class="btn btn-success" href="{% url 'subirArchivo' %}" role="button">
+                        Subir archivos
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title">Lista de archivos DICOM</h4>
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre archivo</th>
+                                    <th scope="col">ID usuario</th>
+                                    <th scope="col">Fecha de subida</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for archivo in archivos %}
+                                <tr>
+                                    <td>{{ archivo.dicom_file.name }}</td>
+                                    <td>{{ archivo.usuario.id }}</td>
+                                    <td>{{ archivo.uploaded_at }}</td>
+                                    <td>
+                                        <form action="{% url 'eliminar_archivo' archivo.pk %}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este archivo?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        </form>
+                                        <a class="btn btn-primary" href="{% url 'verArchivo' archivo.pk %}" role="button">Ver imagen</a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4">No hay archivos DICOM disponibles.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-footer text-muted">Líderes en ciencia y tecnología</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

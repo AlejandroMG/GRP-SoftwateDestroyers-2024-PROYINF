@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block titulo %} Inicio {% endblock %}
+
+{% block contenido %}
+{% load static %}
+<style>
+    body {
+        background-color: black; /* Cambia el color de fondo a negro para toda la página */
+        color: white; /* Cambia el color del texto a blanco */
+    }
+    
+    .jumbotron {
+        padding: 2rem 1rem; /* Ajusta el padding según lo necesites */
+    }
+</style>
+
+<div class="jumbotron">
+    <h1 class="display-3" style="text-align: center;">¡Bienvenido a DicomViewer!</h1>
+    <p class="lead" style="text-align: center;">Este es un espacio dedicado a la visualización y gestión de archivos DICOM.</p>
+    <hr class="my-2">
+    <p style="text-align: center;">Aquí puedes subir, ver y gestionar tus archivos DICOM de manera eficiente.</p>
+    <p class="lead" style="text-align: center;">
+        <a class="btn btn-primary btn-lg" href="{% url 'archivos' %}" role="button">Comenzar a trabajar</a>
+    </p>
+</div>
+
+{% endblock %}

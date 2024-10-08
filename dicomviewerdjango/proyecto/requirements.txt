@@ -1,0 +1,16 @@
+Django==3.2.*
+numpy
+matplotlib
+scikit-learn
+pydicom
+Pillow
+mysqlclient
+djangorestframework
+psycopg2
+gunicorn
+whitenoise
+django-crispy-forms
+celery
+python-decouple
+pymysql
+requests
