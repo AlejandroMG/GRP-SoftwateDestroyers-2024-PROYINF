@@ -14,4 +14,6 @@ ejecutar:
 "python manage.py runserver"  //para correr la aplicación web
 
 seguidoi de esto aparecerá un link en consola que se podrá abrir con ctrl+click,
-abierta la página editar la url y agregar "/viewer" para acceder a la base de la aplicación.
+abierta la página ya se podrá navegar en esta mediante la barra de direcciones superior para acceder a la lista y subida de archivos de la aplicación.
+
+Para ejecutar las pruebas unitarias, abrir una consola dentro de la carpeta tests y correr el siguiente comando: python -m unittest tests.py
