@@ -18,7 +18,7 @@ Se ha elegido la historia de usuario:
 
 # Hito 3 Notas:
 * Progreso <HU-400: Subir imágenes DICOM al sitio web>: se ha podido incorporar un visor de imagenes de archivos DICOM en el sitio web. Se incluye una sección donde el usuario puede acceder a cualquiera de los archivos que subió.
-* Se eligió la historia de usuario <HU-500: Ampliar y reducir Imagen DICOM (Zoom)> como la HU con mayor prioridad de las pendientes. Tiene un comentario sobre su justificación en la sección de Issues.
+* Se eligieron las historias de usuario <HU-500: Ampliar y reducir Imagen DICOM (Zoom)> y <HU-600: Herramientas que permitan el cambio de contraste, imagen en negativo y el uso de distintos tipos de mapas de colores.> como las HU's con mayor prioridad de las pendientes. Tienen comentarios dentro de su respectiva issue (HU).  
 * Las pruebas unitarias verifican el funcionamiento de poder subir archivos al sitio web y si se aplican filtros a una imagen de manera correcta.
 * Las pruebas unitarias se encuentran en la carpeta tests dentro del proyecto.  
 
