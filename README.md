@@ -21,5 +21,7 @@ Se ha elegido la historia de usuario:
 * Se eligieron las historias de usuario <HU-500: Ampliar y reducir Imagen DICOM (Zoom)> y <HU-600: Herramientas que permitan el cambio de contraste, imagen en negativo y el uso de distintos tipos de mapas de colores.> como las HU's con mayor prioridad de las pendientes. Tienen comentarios dentro de su respectiva issue (HU).  
 * Justificacion: Se han escogido las HU-400 y HU-600, zoom y filtros respectivamente debido a que son un poco más rápidas de implementar y aportan suficiente valor al proyecto, completando así una versión mas completa y dejando el tiempo restante para abordar con mayor enfoque las HU mas complejas.   
 * Las pruebas unitarias verifican el funcionamiento de poder subir archivos al sitio web y si se aplican filtros a una imagen de manera correcta.
-* Las pruebas unitarias se encuentran en la carpeta tests dentro del proyecto.  
+* Las pruebas unitarias se encuentran en la carpeta tests dentro del proyecto.
 
+# Hito 4 Notas:  
+* Se ha actualizado la wiki agregando concerns y trade-offs.  
