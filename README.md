@@ -25,3 +25,4 @@ Se ha elegido la historia de usuario:
 
 # Hito 4 Notas:  
 * Se ha actualizado la wiki agregando concerns y trade-offs.  
+* Se agrega la evalucación de pruebas y modificaciones.
