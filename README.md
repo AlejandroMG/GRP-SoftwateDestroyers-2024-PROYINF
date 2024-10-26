@@ -24,5 +24,8 @@ Se ha elegido la historia de usuario:
 * Las pruebas unitarias se encuentran en la carpeta tests dentro del proyecto.
 
 # Hito 4 Notas:  
-* Se ha actualizado la wiki agregando concerns y trade-offs.  
+* Progreso <HU-700: Herramientas de Edición y Visualización de Imagen>: Se agregó una sección nueva a cada archivo DICOM que permite trazar 3 tipos de figuras geometricas, luego le entregará información relevante de la región seleccionada (area, perimetro, diametro, etc.).
+* El sitio web ahora cuenta con una barra de búsqueda.
+* Se ha actualizado la Wiki agregando concerns, trade-offs y otra sección para la iteración/evaluación de HUs.
 * Se agrega la evalucación de pruebas y modificaciones.
+* Nos reunimos con el cliente nuevamente para evaluar el progreso y discutir que podría agregar/modificar.
