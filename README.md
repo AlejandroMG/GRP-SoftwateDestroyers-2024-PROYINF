@@ -28,4 +28,4 @@ Se ha elegido la historia de usuario:
 * El sitio web ahora cuenta con una barra de búsqueda.
 * Se ha actualizado la Wiki agregando concerns, trade-offs y otra sección para la iteración/evaluación de HUs.
 * Se agrega la evalucación de pruebas y modificaciones.
-* Nos reunimos con el cliente nuevamente para evaluar el progreso y discutir que podría agregar/modificar.
+* Nos reunimos con el cliente nuevamente para evaluar el progreso y discutir que se podría agregar/modificar.
