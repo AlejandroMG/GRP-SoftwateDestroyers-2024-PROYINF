@@ -21,9 +21,9 @@ class Usuario(models.Model):
 
 
 class DicomFile(models.Model):
-    dicom_file = models.FileField(upload_to='dicom_files/')
+    dicom_file = models.BinaryField()  # Campo para almacenar el contenido binario del archivo DICOM
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    usuario = models.ForeignKey('auth.User', on_delete=models.CASCADE,null=True, blank=True)
+    usuario = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.dicom_file.name
+        return f'DICOM file uploaded on {self.uploaded_at}'

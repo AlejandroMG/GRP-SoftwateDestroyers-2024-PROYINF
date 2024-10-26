@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block titulo %}Editar Archivo DICOM{% endblock %}
+
+{% block contenido %}
+
+<div class="container mt-4">
+    <h2 class="text-center">Editar Archivo DICOM</h2>
+
+    <!-- Herramientas de dibujo -->
+    <div class="text-center mb-3">
+        <button class="btn btn-info" onclick="setDrawingMode('circle')">Dibujar Círculo</button>
+        <button class="btn btn-info" onclick="setDrawingMode('rectangle')">Dibujar Rectángulo</button>
+        <button class="btn btn-info" onclick="setDrawingMode('ruler')">Regla</button>
+        <button class="btn btn-warning" onclick="undoDrawing()">Deshacer</button>
+    </div>
+
+    <!-- Visualización del archivo DICOM -->
+    {% if img_data %}
+    <div class="text-center mt-3">
+        <div id="dicom-wrapper" style="position: relative; display: inline-block; width: 400px; height: 400px;">
+            <canvas id="dicom-canvas" width="400" height="400" style="width: 100%; height: 100%; object-fit: contain;"></canvas>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-center text-danger">No se pudo cargar la imagen DICOM.</p>
+    {% endif %}
+
+    <!-- Formulario de edición -->
+    <form method="POST" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="text-center mt-3">
+            <a href="{% url 'archivos' %}" class="btn btn-secondary">Volver a lista</a>
+        </div>
+    </form>
+</div>
+
+<!-- Script para dibujar figuras y medir dimensiones -->
+<script>
+    const dicomCanvas = document.getElementById('dicom-canvas');
+    const ctx = dicomCanvas.getContext('2d');
+    const image = new Image();
+    image.src = 'data:image/png;base64,{{ img_data }}';
+
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // Variables para la herramienta de dibujo y medición
+    let drawingMode = null;
+    let isDrawing = false;
+    let startX, startY, endX, endY;
+    let shapes = [];
+
+    image.onload = function() {
+        ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
+    };
+
+    function setDrawingMode(mode) {
+        drawingMode = mode;
+    }
+
+    dicomCanvas.addEventListener('mousedown', function(e) {
+        const rect = dicomCanvas.getBoundingClientRect();
+        startX = (e.clientX - rect.left - offsetX) / scale;
+        startY = (e.clientY - rect.top - offsetY) / scale;
+        isDrawing = true;
+    });
+
+    dicomCanvas.addEventListener('mousemove', function(e) {
+        if (!isDrawing) return;
+
+        const rect = dicomCanvas.getBoundingClientRect();
+        endX = (e.clientX - rect.left - offsetX) / scale;
+        endY = (e.clientY - rect.top - offsetY) / scale;
+
+        drawShapes();
+        drawCurrentShape();
+    });
+
+    dicomCanvas.addEventListener('mouseup', function() {
+        if (!isDrawing) return;
+        isDrawing = false;
+
+        // Mostrar distancia medida si el modo es "Regla"
+        if (drawingMode === 'ruler') {
+            const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            alert(`Distancia medida: ${distance.toFixed(2)} píxeles`);
+        }
+
+        saveShape();
+    });
+
+    function drawShapes() {
+        ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
+        ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
+        shapes.forEach(shape => drawShape(shape));
+    }
+
+    function drawCurrentShape() {
+        ctx.beginPath();
+
+        switch (drawingMode) {
+            case 'circle':
+                const radius = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                ctx.arc(startX * scale + offsetX, startY * scale + offsetY, radius * scale, 0, 2 * Math.PI);
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                showDimensions(`Diámetro: ${(2 * radius).toFixed(2)} px`);
+                break;
+            case 'rectangle':
+                const width = endX - startX;
+                const height = endY - startY;
+                ctx.rect(startX * scale + offsetX, startY * scale + offsetY, width * scale, height * scale);
+                ctx.strokeStyle = 'blue';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                showDimensions(`Ancho: ${width.toFixed(2)} px, Alto: ${height.toFixed(2)} px, Área: ${(width * height).toFixed(2)} px²`);
+                break;
+            case 'ruler':
+                ctx.moveTo(startX * scale + offsetX, startY * scale + offsetY);
+                ctx.lineTo(endX * scale + offsetX, endY * scale + offsetY);
+                ctx.strokeStyle = 'green';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Mostrar la longitud de la línea
+                const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                showDimensions(`Distancia: ${distance.toFixed(2)} px`);
+                break;
+        }
+    }
+
+    function saveShape() {
+        let shape = { type: drawingMode, startX, startY, endX, endY };
+        shapes.push(shape);
+    }
+
+    function drawShape(shape) {
+        ctx.beginPath();
+
+        switch (shape.type) {
+            case 'circle':
+                const radius = Math.sqrt(Math.pow(shape.endX - shape.startX, 2) + Math.pow(shape.endY - shape.startY, 2));
+                ctx.arc(shape.startX * scale + offsetX, shape.startY * scale + offsetY, radius * scale, 0, 2 * Math.PI);
+                ctx.strokeStyle = 'red';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                break;
+            case 'rectangle':
+                const width = shape.endX - shape.startX;
+                const height = shape.endY - shape.startY;
+                ctx.rect(shape.startX * scale + offsetX, shape.startY * scale + offsetY, width * scale, height * scale);
+                ctx.strokeStyle = 'blue';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                break;
+            case 'ruler':
+                ctx.moveTo(shape.startX * scale + offsetX, shape.startY * scale + offsetY);
+                ctx.lineTo(shape.endX * scale + offsetX, shape.endY * scale + offsetY);
+                ctx.strokeStyle = 'green';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                break;
+        }
+    }
+
+    function showDimensions(text) {
+        const dimensionBox = document.getElementById('dimension-box');
+        if (!dimensionBox) {
+            const newBox = document.createElement('div');
+            newBox.id = 'dimension-box';
+            newBox.style.position = 'absolute';
+            newBox.style.top = '10px';
+            newBox.style.right = '10px';
+            newBox.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+            newBox.style.padding = '5px';
+            newBox.style.border = '1px solid black';
+            document.body.appendChild(newBox);
+        }
+        document.getElementById('dimension-box').innerText = text;
+    }
+
+    function undoDrawing() {
+        shapes.pop();
+        drawShapes();
+        clearDimensions();
+    }
+
+    function clearDimensions() {
+        const dimensionBox = document.getElementById('dimension-box');
+        if (dimensionBox) {
+            dimensionBox.innerText = '';
+        }
+    }
+</script>
+
+{% endblock %}

@@ -13,4 +13,3 @@ django-crispy-forms
 celery
 python-decouple
 pymysql
-requests

@@ -29,6 +29,8 @@
     </div>
 
     <style>
+
+
         .dropzone {
             display: flex;
             justify-content: center;
@@ -64,10 +66,17 @@
 
     <script>
         Dropzone.options.myDropzone = {
-            maxFiles: 1,  // Aceptar solo un archivo a la vez
+            maxFiles: 100,  // Aceptar solo un archivo a la vez
             acceptedFiles: ".dcm",  // Solo archivos .dcm (DICOM)
             autoProcessQueue: false, // Evitar que procese automáticamente
             dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subir",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"  // Añadir el token CSRF en el encabezado
+            },
+
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"  // Añadir el token CSRF en el encabezado
+            },
 
             init: function () {
                 const uploadBtn = document.getElementById('uploadBtn');

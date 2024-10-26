@@ -19,24 +19,40 @@
     />
     
     <style>
-        body {
-            background-color: black; /* Aplica el fondo negro a todo el body */
-            color: white; /* Cambia el color del texto a blanco para mejor contraste */
+        /* Asegurar que la página siempre ocupe el 100% de la altura de la ventana */
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: black;
+            color: white;
         }
-        
+
+        /* El contenido principal ocupará el espacio restante */
+        main {
+            flex: 1;
+        }
+
         /* Estilo personalizado para el navbar */
         .navbar-custom {
             background-color: #001F3F; /* Cambia esto por el color azul marino oscuro que desees */
         }
-        
-        /* Agrega cualquier otro estilo que desees aquí */
+
+        /* Estilo para el footer */
+        .footer {
+            background-color: #001F3F;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
     </style>
 </head>
 
 <body>
     <header>
-        <!-- place navbar here -->
-        <nav class="navbar navbar-expand navbar-dark navbar-custom"> <!-- Cambios aquí -->
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand navbar-dark navbar-custom">
             <div class="nav navbar-nav">
                 <a class="nav-item nav-link" href="{% url 'inicio' %}">Inicio</a>
                 <a class="nav-item nav-link" href="{% url 'archivos' %}">Archivos DICOM</a>
@@ -44,6 +60,7 @@
         </nav>
     </header>
 
+    <!-- El contenido principal -->
     <main>
         <div class="container-fluid">
             <div class="row">
@@ -54,8 +71,12 @@
         </div>
     </main>
 
-    <footer>
-        <!-- place footer here -->
+    <!-- Footer siempre al final de la página -->
+    <br><br>
+    <footer class="footer mt-auto py-3">
+        <div class="container text-center">
+            <span>© 2024 - Líderes en Ciencia y Tecnología</span>
+        </div>
     </footer>
     
     <!-- Bootstrap JavaScript Libraries -->

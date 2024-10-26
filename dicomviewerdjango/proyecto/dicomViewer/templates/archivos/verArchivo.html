@@ -3,7 +3,6 @@
 {% block titulo %}Archivo DICOM{% endblock %}
 
 {% block contenido %}
-
 <br><br>
 <div class="container mt-6">
     <div class="row justify-content-center">
@@ -15,11 +14,15 @@
                 <button class="list-group-item list-group-item-action" onclick="applyFilter('invert')">Negativo</button>
                 <button class="list-group-item list-group-item-action" onclick="applyFilter('brightness')">Aumentar brillo</button>
                 <button class="list-group-item list-group-item-action" onclick="applyFilter('contrast')">Aumentar contraste</button>
-                <button class="list-group-item list-group-item-action" onclick="applyFilter('sepia')">Sepia</button>
+                <button class="list-group-item list-group-item-action" onclick="applyFilter('rainbow')">Rainbow</button>
+                <button class="list-group-item list-group-item-action" onclick="applyFilter('ct-color')">CT Colour</button>
+                <button class="list-group-item list-group-item-action" onclick="applyFilter('inverse')">Inverse</button>
                 <button class="list-group-item list-group-item-action">
                     <label for="color-picker">Seleccionar color:</label>
                     <input type="color" id="color-picker" onchange="applyColorMap()">
                 </button>
+                <!-- Nuevo botón para activar la herramienta de medición -->
+                <button class="list-group-item list-group-item-action" onclick="toggleMeasurement()">Herramienta de medición</button>
             </div>
         </div>
 
@@ -27,9 +30,13 @@
         <div class="col-md-6 text-center">
             <h4 class="card-title" style="text-align: center;">Archivo DICOM</h4>
             <div id="dicom-wrapper" style="position: relative; overflow: hidden; display: inline-block; width: 400px; height: 400px;">
-                <!-- Aquí cambiamos el img por canvas -->
                 <canvas id="dicom-canvas" width="400" height="400" style="width: 100%; height: 100%; object-fit: contain;"></canvas>
                 <div id="color-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+            </div>
+
+            <!-- Texto para mostrar la distancia medida -->
+            <div class="mt-2 text-center">
+                <p id="measurement-text" style="font-size: 1.2rem; display: none;">Distancia: <span id="distance-value"></span> píxeles</p>
             </div>
 
             <!-- Botones de movimiento como flechas -->
@@ -43,6 +50,11 @@
             <!-- Botón para regresar al tamaño original -->
             <div class="mt-2 text-center">
                 <button class="btn btn-secondary" onclick="resetZoom()" style="font-size: 1rem; padding: 8px 12px;">Retroceder</button>
+            </div>
+
+            <!-- Botón para descargar la imagen filtrada -->
+            <div class="mt-2 text-center">
+                <button class="btn btn-success" onclick="downloadImage()" style="font-size: 1rem; padding: 8px 12px;">Descargar Imagen Filtrada</button>
             </div>
         </div>
 
@@ -76,6 +88,11 @@
     let offsetX = 0;
     let offsetY = 0;
 
+    // Variables para la herramienta de medición
+    let measurementMode = false;
+    let startX, startY, endX, endY;
+    let isMeasuring = false;
+
     image.onload = function() {
         ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
     };
@@ -84,26 +101,22 @@
     dicomCanvas.addEventListener('wheel', function(e) {
         e.preventDefault();
 
-        // Cambiar la escala basada en el scroll
         if (e.deltaY < 0) {
-            scale *= 1.1; // Zoom in
+            scale *= 1.1; 
         } else {
-            scale /= 1.1; // Zoom out
+            scale /= 1.1; 
         }
 
-        // Asegurarse de que la escala esté en un rango razonable
-        const minScale = 1; // Escala mínima
-        const maxScale = 5; // Escala máxima
+        const minScale = 1;
+        const maxScale = 5;
         scale = Math.min(Math.max(scale, minScale), maxScale);
 
-        // Redibujar la imagen escalada
         ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
         ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
     });
 
-    // Función para mover la imagen
     function moveImage(direction) {
-        const step = 20; // Ajustar el paso de movimiento
+        const step = 20; 
         switch (direction) {
             case 'down':
                 offsetY -= step;
@@ -119,52 +132,170 @@
                 break;
         }
 
-        // Redibujar la imagen con la nueva posición
         ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
         ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
     }
 
-    // Función para resetear el zoom y la posición de la imagen
     function resetZoom() {
         scale = 1;
         offsetX = 0;
         offsetY = 0;
 
-        // Redibujar la imagen con el zoom y posición originales
         ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
         ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
     }
 
-    // Función para aplicar los filtros
     function applyFilter(filter) {
         switch (filter) {
             case 'grayscale':
-                dicomCanvas.style.filter = 'grayscale(100%)'; // Aplicar escala de grises
+                dicomCanvas.style.filter = 'grayscale(100%)'; 
                 break;
             case 'invert':
-                dicomCanvas.style.filter = 'invert(100%)'; // Aplicar negativo
+                dicomCanvas.style.filter = 'invert(100%)'; 
                 break;
             case 'brightness':
-                dicomCanvas.style.filter = 'brightness(150%)'; // Aumentar brillo
+                dicomCanvas.style.filter = 'brightness(150%)'; 
                 break;
             case 'contrast':
-                dicomCanvas.style.filter = 'contrast(150%)'; // Aumentar contraste
+                dicomCanvas.style.filter = 'contrast(150%)'; 
                 break;
             case 'sepia':
-                dicomCanvas.style.filter = 'sepia(100%)'; // Aplicar sepia
+                dicomCanvas.style.filter = 'sepia(100%)'; 
+                break;
+            case 'rainbow':
+                applyRainbow(); 
+                break;
+            case 'ct-colour':
+                applyCtColour(); 
+                break;
+            case 'inverse':
+                applyInverse(); 
                 break;
             default:
-                dicomCanvas.style.filter = 'none'; // Sin filtro
+                dicomCanvas.style.filter = 'none'; 
         }
     }
 
-    // Función para aplicar un mapa de color personalizado
+    function applyRainbow() {
+        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const grayValue = data[i]; 
+            const normalizedValue = grayValue / 255;
+
+            const r = Math.floor((Math.sin(normalizedValue * Math.PI * 2) * 0.5 + 0.5) * 255);
+            const g = Math.floor((Math.sin(normalizedValue * Math.PI * 2 + (2 * Math.PI) / 3) * 0.5 + 0.5) * 255);
+            const b = Math.floor((Math.sin(normalizedValue * Math.PI * 2 + (4 * Math.PI) / 3) * 0.5 + 0.5) * 255);
+
+            data[i] = r;     
+            data[i + 1] = g; 
+            data[i + 2] = b; 
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    function applyCtColour() {
+        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = data[i] * 0.8;     
+            data[i + 1] = data[i + 1] * 0.6; 
+            data[i + 2] = data[i + 2] * 0.2; 
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    function applyInverse() {
+        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = 255 - data[i];     
+            data[i + 1] = 255 - data[i + 1]; 
+            data[i + 2] = 255 - data[i + 2]; 
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
     function applyColorMap() {
-        const colorPicker = document.getElementById('color-picker').value;
-        const overlay = document.getElementById('color-overlay');
-        overlay.style.backgroundColor = colorPicker; // Aplicar el color seleccionado
-        overlay.style.opacity = '0.5'; // Ajustar la transparencia
+        const colorPicker = document.getElementById('color-picker');
+        const colorValue = colorPicker.value;
+        const hex = colorValue.slice(1); 
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+
+        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = (data[i] + r) / 2;     
+            data[i + 1] = (data[i + 1] + g) / 2; 
+            data[i + 2] = (data[i + 2] + b) / 2; 
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    function downloadImage() {
+        const link = document.createElement('a');
+        link.download = 'filtered_dicom_image.png';
+        link.href = dicomCanvas.toDataURL();
+        link.click();
+    }
+
+    // Nueva funcionalidad: herramienta de medición en tiempo real
+    function toggleMeasurement() {
+        measurementMode = !measurementMode;
+        if (measurementMode) {
+            alert("Modo de medición activado. Haz clic y arrastra para medir.");
+        }
+    }
+
+    dicomCanvas.addEventListener('mousedown', function(e) {
+        if (measurementMode) {
+            const rect = dicomCanvas.getBoundingClientRect();
+            startX = (e.clientX - rect.left - offsetX) / scale;
+            startY = (e.clientY - rect.top - offsetY) / scale;
+            isMeasuring = true;
+        }
+    });
+
+    dicomCanvas.addEventListener('mousemove', function(e) {
+        if (measurementMode && isMeasuring) {
+            const rect = dicomCanvas.getBoundingClientRect();
+            endX = (e.clientX - rect.left - offsetX) / scale;
+            endY = (e.clientY - rect.top - offsetY) / scale;
+            drawMeasurement();
+        }
+    });
+
+    dicomCanvas.addEventListener('mouseup', function(e) {
+        if (measurementMode && isMeasuring) {
+            isMeasuring = false;
+
+            // Calcular la distancia final y mostrarla
+            const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+            alert("Distancia medida en la imagen DICOM: " + distance.toFixed(2) + " píxeles");
+        }
+    });
+
+    function drawMeasurement() {
+        // Limpiar y redibujar la imagen actual en el lienzo
+        ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
+        ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
+
+        // Dibujar la línea de medición
+        ctx.beginPath();
+        ctx.moveTo(startX * scale + offsetX, startY * scale + offsetY);
+        ctx.lineTo(endX * scale + offsetX, endY * scale + offsetY);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.stroke();
     }
 </script>
+
 
 {% endblock %}

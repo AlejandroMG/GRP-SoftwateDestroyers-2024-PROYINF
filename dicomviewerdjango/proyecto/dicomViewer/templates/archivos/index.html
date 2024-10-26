@@ -2,42 +2,67 @@
 
 {% block titulo %}Lista de archivos Dicom{% endblock %}
 
-{% block contenido  %}
+{% block contenido %}
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <a class="btn btn-success" href="{% url 'subirArchivo' %}" role="button">
-                        Subir archivos
-                    </a>
+                    <a class="btn btn-success" href="{% url 'subirArchivo' %}" role="button">Subir archivos</a>
                 </div>
 
                 <div class="card-body">
                     <h4 class="card-title">Lista de archivos DICOM</h4>
+
+                    <!-- Formulario para los filtros -->
+                    <form method="GET" action="{% url 'archivos' %}" class="mb-3">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="text" name="study_id" class="form-control" placeholder="Filtrar por ID de estudio" value="{{ request.GET.study_id }}">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="patient_id" class="form-control" placeholder="Filtrar por ID paciente" value="{{ request.GET.patient_id }}">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" name="study_date" class="form-control" placeholder="Filtrar por fecha de estudio" value="{{ request.GET.study_date }}">
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12 text-center">
+                                <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <div class="table-responsive">
                         <table class="table table-primary">
                             <thead>
                                 <tr>
-                                    <th scope="col">Nombre archivo</th>
-                                    <th scope="col">ID usuario</th>
-                                    <th scope="col">Fecha de subida</th>
+                                    <th scope="col">ID estudio</th>
+                                    <th scope="col">ID paciente</th>
+                                    <th scope="col">Fecha de estudio</th>
                                     <th scope="col">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for archivo in archivos %}
+                                {% for archivo_info in archivos_info %}
                                 <tr>
-                                    <td>{{ archivo.dicom_file.name }}</td>
-                                    <td>{{ archivo.usuario.id }}</td>
-                                    <td>{{ archivo.uploaded_at }}</td>
+                                    <td>{{ archivo_info.study_id }}</td>
+                                    <td>{{ archivo_info.patient_id }}</td>
+                                    <td>{{ archivo_info.study_date }}</td>
                                     <td>
-                                        <form action="{% url 'eliminar_archivo' archivo.pk %}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este archivo?');">
+                                        <!-- Botón de eliminar -->
+                                        <form action="{% url 'eliminar_archivo' archivo_info.archivo.pk %}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este archivo?');">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-danger">Eliminar</button>
                                         </form>
-                                        <a class="btn btn-primary" href="{% url 'verArchivo' archivo.pk %}" role="button">Ver imagen</a>
+
+                                        <!-- Botón de ver imagen -->
+                                        <a class="btn btn-primary" href="{% url 'verArchivo' archivo_info.archivo.pk %}" role="button">Ver imagen</a>
+
+                                        <!-- Botón de editar -->
+                                        <a class="btn btn-warning" href="{% url 'editar_archivo' archivo_info.archivo.pk %}" role="button">Editar</a>
                                     </td>
                                 </tr>
                                 {% empty %}
