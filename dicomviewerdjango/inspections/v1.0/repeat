@@ -1,0 +1,14 @@
+Severidad: Crítica 
+Descripción: Este issue que puede parecer inofensivo, a la larga puede generar problemas y dificultad en el mantenimiento del proyecto.  
+El repetir constantemente un mensaje es una mala practica, ya que si nuevamente debemos utilizarlo, seguiremos repitiendo cada vez más este mismo 
+mensaje, lo que si en algun momento fuera necesario cambiar, se tardaría mucho más de lo esperado, perdiendo tiempo valioso en una mala practica.  
+
+Recomendaciones de SonarCloud:  
+
+Nos recomienda crear una variable por cada tipo de mensaje, de esta forma, cuando el proyecto crezca, solamente añadiremos el nombre de la variable. 
+Además si fuera necesario cambiar lo que dice el mensaje, bastaría con cambiar el contenido de esta, haciendo que sea mucho más simple y dando orden
+y buena mantenibilidad al proyecto.  
+
+Resumen:  
+
+Se creará una variable que guarde el texto del mensaje, y se seguirá haciendo esta practica por cada mensaje de error utilizado.  
