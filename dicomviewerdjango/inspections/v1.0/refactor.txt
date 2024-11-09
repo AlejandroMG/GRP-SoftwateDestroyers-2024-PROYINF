@@ -1,5 +1,5 @@
 Severidad: Alta
-Descripción: La función open_dicom_folder(),presenta una complejidad cognitiva de 20 ptos. lo cual significa el grado de dificultad en entender el flujo de control del código. 
+Descripción: La función archivos(request),presenta una complejidad cognitiva de 20 ptos. lo cual significa el grado de dificultad en entender el flujo de control del código. 
 Una alta complejidad es más resulta en que es más difícil de leer, probar y modificar, por lo que se propone refactorizar la función en partes más pequeñas.
 
 Recomendaciones de SonarCloud:
