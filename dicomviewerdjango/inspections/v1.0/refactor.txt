@@ -1,0 +1,19 @@
+Severidad: Alta
+Descripción: La función open_dicom_folder(),presenta una complejidad cognitiva de 20 ptos. lo cual significa el grado de dificultad en entender el flujo de control del código. 
+Una alta complejidad es más resulta en que es más difícil de leer, probar y modificar, por lo que se propone refactorizar la función en partes más pequeñas.
+
+Recomendaciones de SonarCloud
+
+Reducir la complejidad cognitiva
+SonarCloud recomienda bajar la complejidad de 20 a 15. Para lograrlo, dividiré open_dicom_folder en funciones más pequeñas con tareas específicas, lo que hará el código más simple y fácil de mantener.
+
+Evitar anidamientos profundos
+Esta recomendación se aplicará usando guards (condiciones de salida al inicio de la función) para reducir el nivel de anidamiento, haciendo el flujo del código más claro.
+
+Optimizar estructuras de datos
+Consideraré el uso de estructuras como listas de comprensión o diccionarios, solo si aportan claridad y simplicidad, sin añadir complejidad innecesaria.
+
+Revisar el manejo de errores
+Si hay validaciones o manejos de errores extensos, los moveré a funciones separadas para simplificar la función principal.
+
+Resumen: Implementaré las sugerencias para reducir la complejidad y el anidamiento, y revisaré las estructuras de datos y manejo de errores solo si ayudan a la claridad del código.
