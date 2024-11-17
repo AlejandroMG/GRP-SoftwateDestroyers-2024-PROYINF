@@ -32,3 +32,5 @@ Se ha elegido la historia de usuario:
 
 # Hito 5 Notas:
 * Se planificó y aplicó un plan de pruebas con Apache jmeter, se midieron los tiempos de respuesta para muchos usuarios consultando la app. Se presentan los gráficos de resultados que muestran la latencia de los procesos y en que casos no se logró el tiempo de respuesta máximo de 1 segundo.
+* En la direccion dicomviewerdjango/inspections/v1.0 se incluyeron capturas de pantalla sobre la inspección de código usando el sitio web Sonarqube. Elegimos 2 'issues': definir una constante en lugar de repetir un prompt varias veces y reducir la complejidad de una función auxiliar en el código.
+* Actualizamos la sección de Story Point HU en la Wiki con nuestro análisis sobre la escala utilizada y nuestra justificación por las estimaciones de las HU.
