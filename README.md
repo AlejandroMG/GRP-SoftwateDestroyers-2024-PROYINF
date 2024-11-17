@@ -29,3 +29,6 @@ Se ha elegido la historia de usuario:
 * Se ha actualizado la Wiki agregando concerns, trade-offs y otra sección para la iteración/evaluación de HUs.
 * Se agrega la evalucación de pruebas y modificaciones.
 * Nos reunimos con el cliente nuevamente para evaluar el progreso y discutir que se podría agregar/modificar.
+
+# Hito 5 Notas:
+* Se planificó y aplicó un plan de pruebas con Apache jmeter, se midieron los tiempos de respuesta para muchos usuarios consultando la app. Se presentan los gráficos de resultados que muestran la latencia de los procesos y en que casos no se logró el tiempo de respuesta máximo de 1 segundo.
