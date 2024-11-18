@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block titulo %}Archivo DICOM{% endblock %}
+
+{% block contenido %}
+
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <a class="btn btn-success" href="{% url 'subirArchivo' %}" role="button">Subir archivos</a>
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title">Lista de Estudios DICOM</h4>
+
+
+                    <div class="table-responsive">
+                        <table class="table table-primary">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID Estudio</th>
+                                    <th scope="col"> Nombre de Estudio</th>
+                                    <th scope="col"> Acciones </th>
+                                    <th scope="col">  </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for estudio in estudios %}
+                                <tr>
+                                    <td>{{ estudio.id }}</td>
+                                    <td>{{ estudio.name }}</td>
+
+                                    <td>
+
+                                        <!-- Botón de ver imagen -->
+                                        <a class="btn btn-primary" href="{% url 'archivos' pk=estudio.id %}" role="button">Ver Imagen</a>
+                                        <a class="btn btn-primary" href="{% url 'verListado' pk=estudio.id %}" role="button">Listado de imagenes</a>
+                                        <form action="{% url 'eliminar_estudio' estudio.id %}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este archivo?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                        </form>
+
+                                    </td>
+                                    <td>
+                                        <!-- Botón de ver imagen -->
+                                        
+
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4">No hay Estudios disponibles.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-footer text-muted">Líderes en ciencia y tecnología</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -5,39 +5,62 @@
 {% block contenido %}
 
 <div class="container mt-4">
-    <h2 class="text-center">Editar Archivo DICOM</h2>
+    <h2 class="text-center">Modo edición DICOM</h2>
+    <hr class="my-3">
 
-    <!-- Herramientas de dibujo -->
-    <div class="text-center mb-3">
-        <button class="btn btn-info" onclick="setDrawingMode('circle')">Dibujar Círculo</button>
-        <button class="btn btn-info" onclick="setDrawingMode('rectangle')">Dibujar Rectángulo</button>
-        <button class="btn btn-info" onclick="setDrawingMode('ruler')">Regla</button>
-        <button class="btn btn-warning" onclick="undoDrawing()">Deshacer</button>
-    </div>
 
-    <!-- Visualización del archivo DICOM -->
-    {% if img_data %}
-    <div class="text-center mt-3">
-        <div id="dicom-wrapper" style="position: relative; display: inline-block; width: 400px; height: 400px;">
-            <canvas id="dicom-canvas" width="400" height="400" style="width: 100%; height: 100%; object-fit: contain;"></canvas>
+    <div class="row">
+        <!-- Barra lateral izquierda para filtros de visualización -->
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Filtros de Visualización</h5>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <button class="btn btn-light mb-2" onclick="applyFilter('grayscale')">Escala de Grises</button>
+                    <button class="btn btn-light mb-2" onclick="applyFilter('invert')">Negativo</button>
+                    <button class="btn btn-light mb-2" onclick="applyFilter('brightness')">Aumentar Brillo</button>
+                    <button class="btn btn-light mb-2" onclick="applyFilter('contrast')">Aumentar Contraste</button>
+                    <button class="btn btn-light mb-2" onclick="applyFilter('sepia')">Sepia</button>
+                    <button class="btn btn-light mb-2" onclick="applyFilter('rainbow')">Rainbow</button>
+                    <button class="btn btn-light mb-2" onclick="applyFilter('ct-colour')">CT Colour</button>
+                    <button class="btn btn-light" onclick="applyFilter('inverse')">Inverse</button>
+                </div>
+            </div>
+        </div>
+
+         <!-- Card para visualización del archivo DICOM y herramientas de medición en el centro -->
+         <div class="col-md-9">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Visualización y Herramientas de Medición</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="text-center mb-3">
+                        <button class="btn btn-info" onclick="setDrawingMode('circle')">Dibujar Círculo</button>
+                        <button class="btn btn-info" onclick="setDrawingMode('rectangle')">Dibujar Rectángulo</button>
+                        <button class="btn btn-info" onclick="setDrawingMode('ruler')">Regla</button>
+                        <button class="btn btn-warning" onclick="undoDrawing()">Deshacer</button>
+                    </div>
+
+                    {% if img_data %}
+                    <div id="dicom-wrapper" style="position: relative; display: inline-block; width: 400px; height: 400px;">
+                        <canvas id="dicom-canvas" width="400" height="400" style="width: 100%; height: 100%; object-fit: contain;"></canvas>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-danger">No se pudo cargar la imagen DICOM.</p>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'archivos' id_estudio %}" class="btn btn-secondary">Volver a lista</a>
+                </div>
+            </div>
         </div>
     </div>
-    {% else %}
-    <p class="text-center text-danger">No se pudo cargar la imagen DICOM.</p>
-    {% endif %}
-
-    <!-- Formulario de edición -->
-    <form method="POST" enctype="multipart/form-data" class="mt-4">
-        {% csrf_token %}
-        {{ form.as_p }}
-
-        <div class="text-center mt-3">
-            <a href="{% url 'archivos' %}" class="btn btn-secondary">Volver a lista</a>
-        </div>
-    </form>
 </div>
 
-<!-- Script para dibujar figuras y medir dimensiones -->
+
+<!-- Script para filtros de visualización y herramientas de dibujo -->
 <script>
     const dicomCanvas = document.getElementById('dicom-canvas');
     const ctx = dicomCanvas.getContext('2d');
@@ -48,7 +71,7 @@
     let offsetX = 0;
     let offsetY = 0;
 
-    // Variables para la herramienta de dibujo y medición
+    // Variables para herramientas de dibujo y medición
     let drawingMode = null;
     let isDrawing = false;
     let startX, startY, endX, endY;
@@ -57,6 +80,39 @@
     image.onload = function() {
         ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
     };
+
+    // Aplicar filtros en el lienzo
+    // Función para aplicar filtros
+    function applyFilter(filter) {
+        switch (filter) {
+            case 'grayscale':
+                dicomCanvas.style.filter = 'grayscale(100%)'; 
+                break;
+            case 'invert':
+                dicomCanvas.style.filter = 'invert(100%)'; 
+                break;
+            case 'brightness':
+                dicomCanvas.style.filter = 'brightness(150%)'; 
+                break;
+            case 'contrast':
+                dicomCanvas.style.filter = 'contrast(150%)'; 
+                break;
+            case 'sepia':
+                dicomCanvas.style.filter = 'sepia(100%)'; 
+                break;
+            case 'rainbow':
+                applyRainbow(); 
+                break;
+            case 'ct-colour':
+                applyCtColour(); 
+                break;
+            case 'inverse':
+                applyInverse(); 
+                break;
+            default:
+                dicomCanvas.style.filter = 'none'; 
+        }
+    }
 
     function setDrawingMode(mode) {
         drawingMode = mode;
@@ -84,7 +140,6 @@
         if (!isDrawing) return;
         isDrawing = false;
 
-        // Mostrar distancia medida si el modo es "Regla"
         if (drawingMode === 'ruler') {
             const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
             alert(`Distancia medida: ${distance.toFixed(2)} píxeles`);
@@ -127,7 +182,6 @@
                 ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // Mostrar la longitud de la línea
                 const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
                 showDimensions(`Distancia: ${distance.toFixed(2)} px`);
                 break;
@@ -196,6 +250,54 @@
             dimensionBox.innerText = '';
         }
     }
+
+
+    function applyRainbow() {
+        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const grayValue = data[i];
+            const normalizedValue = grayValue / 255;
+
+            const r = Math.floor((Math.sin(normalizedValue * Math.PI * 2) * 0.5 + 0.5) * 255);
+            const g = Math.floor((Math.sin(normalizedValue * Math.PI * 2 + (2 * Math.PI) / 3) * 0.5 + 0.5) * 255);
+            const b = Math.floor((Math.sin(normalizedValue * Math.PI * 2 + (4 * Math.PI) / 3) * 0.5 + 0.5) * 255);
+
+            data[i] = r;
+            data[i + 1] = g;
+            data[i + 2] = b;
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    // Función personalizada para filtro CT Colour
+    function applyCtColour() {
+        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = data[i] * 0.8;
+            data[i + 1] = data[i + 1] * 0.6;
+            data[i + 2] = data[i + 2] * 0.2;
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    // Función personalizada para filtro Inverse
+    function applyInverse() {
+        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = 255 - data[i];
+            data[i + 1] = 255 - data[i + 1];
+            data[i + 2] = 255 - data[i + 2];
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
 </script>
 
 {% endblock %}

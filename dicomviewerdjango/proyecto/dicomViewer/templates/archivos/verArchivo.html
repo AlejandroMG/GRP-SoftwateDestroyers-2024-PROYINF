@@ -4,80 +4,63 @@
 
 {% block contenido %}
 <br><br>
-<div class="container mt-6">
-    <div class="row justify-content-center">
-        <!-- Barra lateral izquierda para los filtros -->
-        <div class="col-md-3 text-align: start;">
-            <h4 class="card-title" style="text-align: center;">Filtros</h4>
-            <div class="list-group">
-                <button class="list-group-item list-group-item-action" onclick="applyFilter('grayscale')">Escala de grises</button>
-                <button class="list-group-item list-group-item-action" onclick="applyFilter('invert')">Negativo</button>
-                <button class="list-group-item list-group-item-action" onclick="applyFilter('brightness')">Aumentar brillo</button>
-                <button class="list-group-item list-group-item-action" onclick="applyFilter('contrast')">Aumentar contraste</button>
-                <button class="list-group-item list-group-item-action" onclick="applyFilter('rainbow')">Rainbow</button>
-                <button class="list-group-item list-group-item-action" onclick="applyFilter('ct-color')">CT Colour</button>
-                <button class="list-group-item list-group-item-action" onclick="applyFilter('inverse')">Inverse</button>
-                <button class="list-group-item list-group-item-action">
-                    <label for="color-picker">Seleccionar color:</label>
-                    <input type="color" id="color-picker" onchange="applyColorMap()">
-                </button>
-                <!-- Nuevo botón para activar la herramienta de medición -->
-                <button class="list-group-item list-group-item-action" onclick="toggleMeasurement()">Herramienta de medición</button>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <!-- Columna para la visualización de la imagen DICOM a la izquierda -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h4>Archivo DICOM</h4>
+                        </div>
+                        <div class="card-body text-center" style="background-color: black;">
+                            <div id="dicom-wrapper" style="position: relative; overflow: hidden; display: inline-block; width: 100%; height: 400px;">
+                                <canvas id="dicom-canvas" width="400" height="400" style="width: 100%; height: 100%; object-fit: contain;"></canvas>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button class="btn btn-secondary" onclick="resetImage()" style="font-size: 1rem; padding: 8px 12px;"> Volver al estado inicial</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna para la información específica del archivo DICOM a la derecha -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h4>Información del archivo DICOM</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item"><strong>Número de instancia:</strong> {{ dicom_data.instance_number }}</li>
+                                <li class="list-group-item"><strong>Paciente:</strong> {{ dicom_data.patient_name }}</li>
+                                <li class="list-group-item"><strong>ID del Paciente:</strong> {{ dicom_data.patient_id }}</li>
+                                <li class="list-group-item"><strong>Sexo:</strong> {{ dicom_data.patient_sex }}</li>
+                                <li class="list-group-item"><strong>Edad:</strong> {{ dicom_data.patient_age }}</li>
+                                <li class="list-group-item"><strong>Institución:</strong> {{ dicom_data.institution_name }}</li>
+                                <li class="list-group-item"><strong>Estudio:</strong> {{ dicom_data.study_description }}</li>
+                                <li class="list-group-item"><strong>Modalidad:</strong> {{ dicom_data.modality }}</li>
+                                <li class="list-group-item"><strong>Fecha del Estudio:</strong> {{ dicom_data.study_date }}</li>
+                                <li class="list-group-item"><strong>ID del Estudio:</strong> {{ dicom_data.study_id }}</li>
+                                <li class="list-group-item"><strong>Protocolo:</strong> {{ dicom_data.protocol_name }}</li>
+                                <li class="list-group-item"><strong>Número de Serie:</strong> {{ dicom_data.series_number }}</li>
+                                <li class="list-group-item"><strong>Descripción de la Serie:</strong> {{ dicom_data.series_description }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón para volver a la lista al final de la página -->
+            <div class="text-center mt-4">
+                <a class="btn btn-secondary" href="{% url 'archivos' id_estudio %}" style="font-size: 1rem; padding: 8px 12px;">Volver a la lista</a>
             </div>
         </div>
-
-        <!-- Columna para la imagen -->
-        <div class="col-md-6 text-center">
-            <h4 class="card-title" style="text-align: center;">Archivo DICOM</h4>
-            <div id="dicom-wrapper" style="position: relative; overflow: hidden; display: inline-block; width: 400px; height: 400px;">
-                <canvas id="dicom-canvas" width="400" height="400" style="width: 100%; height: 100%; object-fit: contain;"></canvas>
-                <div id="color-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
-            </div>
-
-            <!-- Texto para mostrar la distancia medida -->
-            <div class="mt-2 text-center">
-                <p id="measurement-text" style="font-size: 1.2rem; display: none;">Distancia: <span id="distance-value"></span> píxeles</p>
-            </div>
-
-            <!-- Botones de movimiento como flechas -->
-            <div class="mt-3" style="display: flex; justify-content: center; gap: 10px;">
-                <button class="btn btn-primary" onclick="moveImage('up')" style="font-size: 1rem; padding: 10px 15px;">↑</button>
-                <button class="btn btn-primary" onclick="moveImage('left')" style="font-size: 1rem; padding: 10px 15px;">←</button>
-                <button class="btn btn-primary" onclick="moveImage('right')" style="font-size: 1rem; padding: 10px 15px;">→</button>
-                <button class="btn btn-primary" onclick="moveImage('down')" style="font-size: 1rem; padding: 10px 15px;">↓</button>
-            </div>
-
-            <!-- Botón para regresar al tamaño original -->
-            <div class="mt-2 text-center">
-                <button class="btn btn-secondary" onclick="resetZoom()" style="font-size: 1rem; padding: 8px 12px;">Retroceder</button>
-            </div>
-
-            <!-- Botón para descargar la imagen filtrada -->
-            <div class="mt-2 text-center">
-                <button class="btn btn-success" onclick="downloadImage()" style="font-size: 1rem; padding: 8px 12px;">Descargar Imagen Filtrada</button>
-            </div>
-        </div>
-
-        <!-- Columna para la información del archivo DICOM -->
-        <div class="col-md-3 text-align: start;">
-            <h4 class="card-title" style="text-align: center;">Información del archivo DICOM</h4>
-            <ul class="list-group">
-                <li class="list-group-item"><strong>Paciente:</strong> {{ dicom_data.patient_name }}</li>
-                <li class="list-group-item"><strong>Estudio:</strong> {{ dicom_data.study_description }}</li>
-                <li class="list-group-item"><strong>Modalidad:</strong> {{ dicom_data.modality }}</li>
-                <li class="list-group-item"><strong>Fecha del Estudio:</strong> {{ dicom_data.study_date }}</li>
-                <li class="list-group-item"><strong>ID del Estudio:</strong> {{ dicom_data.study_id }}</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Botón para regresar a la lista -->
-    <div class="text-center mt-3">
-        <a class="btn btn-secondary" href="{% url 'archivos' %}">Volver a la lista</a>
     </div>
 </div>
 
-<!-- JavaScript para aplicar filtros a la imagen -->
+<!-- JavaScript para cargar y visualizar la imagen DICOM -->
 <script>
     const dicomCanvas = document.getElementById('dicom-canvas');
     const ctx = dicomCanvas.getContext('2d');
@@ -88,214 +71,71 @@
     let offsetX = 0;
     let offsetY = 0;
 
-    // Variables para la herramienta de medición
-    let measurementMode = false;
-    let startX, startY, endX, endY;
-    let isMeasuring = false;
-
     image.onload = function() {
         ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
     };
 
-    // Zoom con scroll
+    // Zoom sin movimiento
     dicomCanvas.addEventListener('wheel', function(e) {
         e.preventDefault();
 
         if (e.deltaY < 0) {
-            scale *= 1.1; 
+            scale *= 1.1;
         } else {
-            scale /= 1.1; 
+            scale /= 1.1;
         }
 
         const minScale = 1;
         const maxScale = 5;
         scale = Math.min(Math.max(scale, minScale), maxScale);
 
+        // Redibuja la imagen en el centro sin ajustar el desplazamiento
         ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
         ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
     });
 
-    function moveImage(direction) {
-        const step = 20; 
-        switch (direction) {
-            case 'down':
-                offsetY -= step;
-                break;
-            case 'up':
-                offsetY += step;
-                break;
-            case 'right':
-                offsetX -= step;
-                break;
-            case 'left':
-                offsetX += step;
-                break;
-        }
-
-        ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
-        ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
-    }
-
-    function resetZoom() {
-        scale = 1;
-        offsetX = 0;
-        offsetY = 0;
-
-        ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
-        ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
-    }
-
-    function applyFilter(filter) {
-        switch (filter) {
-            case 'grayscale':
-                dicomCanvas.style.filter = 'grayscale(100%)'; 
-                break;
-            case 'invert':
-                dicomCanvas.style.filter = 'invert(100%)'; 
-                break;
-            case 'brightness':
-                dicomCanvas.style.filter = 'brightness(150%)'; 
-                break;
-            case 'contrast':
-                dicomCanvas.style.filter = 'contrast(150%)'; 
-                break;
-            case 'sepia':
-                dicomCanvas.style.filter = 'sepia(100%)'; 
-                break;
-            case 'rainbow':
-                applyRainbow(); 
-                break;
-            case 'ct-colour':
-                applyCtColour(); 
-                break;
-            case 'inverse':
-                applyInverse(); 
-                break;
-            default:
-                dicomCanvas.style.filter = 'none'; 
-        }
-    }
-
-    function applyRainbow() {
-        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
-        const data = imageData.data;
-
-        for (let i = 0; i < data.length; i += 4) {
-            const grayValue = data[i]; 
-            const normalizedValue = grayValue / 255;
-
-            const r = Math.floor((Math.sin(normalizedValue * Math.PI * 2) * 0.5 + 0.5) * 255);
-            const g = Math.floor((Math.sin(normalizedValue * Math.PI * 2 + (2 * Math.PI) / 3) * 0.5 + 0.5) * 255);
-            const b = Math.floor((Math.sin(normalizedValue * Math.PI * 2 + (4 * Math.PI) / 3) * 0.5 + 0.5) * 255);
-
-            data[i] = r;     
-            data[i + 1] = g; 
-            data[i + 2] = b; 
-        }
-
-        ctx.putImageData(imageData, 0, 0);
-    }
-
-    function applyCtColour() {
-        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
-        const data = imageData.data;
-
-        for (let i = 0; i < data.length; i += 4) {
-            data[i] = data[i] * 0.8;     
-            data[i + 1] = data[i + 1] * 0.6; 
-            data[i + 2] = data[i + 2] * 0.2; 
-        }
-        ctx.putImageData(imageData, 0, 0);
-    }
-
-    function applyInverse() {
-        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
-        const data = imageData.data;
-
-        for (let i = 0; i < data.length; i += 4) {
-            data[i] = 255 - data[i];     
-            data[i + 1] = 255 - data[i + 1]; 
-            data[i + 2] = 255 - data[i + 2]; 
-        }
-        ctx.putImageData(imageData, 0, 0);
-    }
-
-    function applyColorMap() {
-        const colorPicker = document.getElementById('color-picker');
-        const colorValue = colorPicker.value;
-        const hex = colorValue.slice(1); 
-        const r = parseInt(hex.slice(0, 2), 16);
-        const g = parseInt(hex.slice(2, 4), 16);
-        const b = parseInt(hex.slice(4, 6), 16);
-
-        const imageData = ctx.getImageData(0, 0, dicomCanvas.width, dicomCanvas.height);
-        const data = imageData.data;
-
-        for (let i = 0; i < data.length; i += 4) {
-            data[i] = (data[i] + r) / 2;     
-            data[i + 1] = (data[i + 1] + g) / 2; 
-            data[i + 2] = (data[i + 2] + b) / 2; 
-        }
-        ctx.putImageData(imageData, 0, 0);
-    }
-
-    function downloadImage() {
-        const link = document.createElement('a');
-        link.download = 'filtered_dicom_image.png';
-        link.href = dicomCanvas.toDataURL();
-        link.click();
-    }
-
-    // Nueva funcionalidad: herramienta de medición en tiempo real
-    function toggleMeasurement() {
-        measurementMode = !measurementMode;
-        if (measurementMode) {
-            alert("Modo de medición activado. Haz clic y arrastra para medir.");
-        }
-    }
+    // Permitir el arrastre de la imagen cuando está ampliada
+    let isDragging = false;
+    let startX, startY;
 
     dicomCanvas.addEventListener('mousedown', function(e) {
-        if (measurementMode) {
-            const rect = dicomCanvas.getBoundingClientRect();
-            startX = (e.clientX - rect.left - offsetX) / scale;
-            startY = (e.clientY - rect.top - offsetY) / scale;
-            isMeasuring = true;
-        }
+        isDragging = true;
+        startX = e.clientX - offsetX;
+        startY = e.clientY - offsetY;
     });
 
     dicomCanvas.addEventListener('mousemove', function(e) {
-        if (measurementMode && isMeasuring) {
-            const rect = dicomCanvas.getBoundingClientRect();
-            endX = (e.clientX - rect.left - offsetX) / scale;
-            endY = (e.clientY - rect.top - offsetY) / scale;
-            drawMeasurement();
+        if (isDragging) {
+            offsetX = e.clientX - startX;
+            offsetY = e.clientY - startY;
+
+            // Limita el movimiento dentro de los bordes
+            const maxOffsetX = (dicomCanvas.width * scale - dicomCanvas.width) / 2;
+            const maxOffsetY = (dicomCanvas.height * scale - dicomCanvas.height) / 2;
+
+            offsetX = Math.min(Math.max(offsetX, -maxOffsetX), maxOffsetX);
+            offsetY = Math.min(Math.max(offsetY, -maxOffsetY), maxOffsetY);
+
+            ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
+            ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
         }
     });
 
-    dicomCanvas.addEventListener('mouseup', function(e) {
-        if (measurementMode && isMeasuring) {
-            isMeasuring = false;
-
-            // Calcular la distancia final y mostrarla
-            const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-            alert("Distancia medida en la imagen DICOM: " + distance.toFixed(2) + " píxeles");
-        }
+    dicomCanvas.addEventListener('mouseup', function() {
+        isDragging = false;
     });
 
-    function drawMeasurement() {
-        // Limpiar y redibujar la imagen actual en el lienzo
+    dicomCanvas.addEventListener('mouseleave', function() {
+        isDragging = false;
+    });
+
+    // Función para restablecer la imagen al estado inicial
+    function resetImage() {
+        scale = 1;
+        offsetX = 0;
+        offsetY = 0;
         ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
-        ctx.drawImage(image, offsetX, offsetY, dicomCanvas.width * scale, dicomCanvas.height * scale);
-
-        // Dibujar la línea de medición
-        ctx.beginPath();
-        ctx.moveTo(startX * scale + offsetX, startY * scale + offsetY);
-        ctx.lineTo(endX * scale + offsetX, endY * scale + offsetY);
-        ctx.strokeStyle = 'red';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        ctx.drawImage(image, 0, 0, dicomCanvas.width, dicomCanvas.height);
     }
 </script>
-
-
 {% endblock %}

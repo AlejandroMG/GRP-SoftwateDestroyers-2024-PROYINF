@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==3.2.*"
+numpy = "*"
+matplotlib = "*"
+scikit-learn = "*"
+pydicom = "*"
+pillow = "*"
+mysqlclient = "*"
+djangorestframework = "*"
+psycopg2 = "*"
+gunicorn = "*"
+whitenoise = "*"
+django-crispy-forms = "*"
+celery = "*"
+python-decouple = "*"
+pymysql = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

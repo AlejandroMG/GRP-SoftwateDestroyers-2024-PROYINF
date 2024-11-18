@@ -1,0 +1,123 @@
+<body>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form
+                    action="{% url 'subirArchivo' %}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="dropzone"
+                    id="myDropzone"
+                >
+                    {% csrf_token %}  <!-- Incluye el token CSRF para seguridad -->
+                    <div class="dz-message" data-dz-message>
+                        <span>Arrastra los archivos aquí o haz clic para subir</span>
+                    </div>
+                </form>
+
+                <!-- Botones de confirmación y cancelación para la subida de archivos -->
+                <div class="text-center mt-3">
+                    <button id="uploadBtn" class="btn btn-primary" disabled>
+                        Confirmar subida
+                    </button>
+                    <button id="cancelBtn" class="btn btn-danger">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+
+
+        .dropzone {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 200px;
+            border: 2px dashed #007bff;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+
+        /* Estilo para centrar la imagen de vista previa */
+        .dropzone .dz-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+
+        .dropzone .dz-preview .dz-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+        }
+
+        /* Tamaño ajustado de la vista previa */
+        .dropzone .dz-image img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+    </style>
+
+    <script>
+        Dropzone.options.myDropzone = {
+            maxFiles: 100,  // Aceptar solo un archivo a la vez
+            acceptedFiles: ".zip",  // Solo archivos .dcm (DICOM)
+            autoProcessQueue: false, // Evitar que procese automáticamente
+            dictDefaultMessage: "Arrastra los archivos aquí o haz clic para subir",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"  // Añadir el token CSRF en el encabezado
+            },
+
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}"  // Añadir el token CSRF en el encabezado
+            },
+
+            init: function () {
+                const uploadBtn = document.getElementById('uploadBtn');
+                const cancelBtn = document.getElementById('cancelBtn');
+                const myDropzone = this;
+
+                // Habilitar el botón de "Confirmar subida" cuando se agrega un archivo
+                this.on("addedfile", function () {
+                    uploadBtn.disabled = false;
+                });
+
+                // Subir archivos cuando se pulsa el botón "Confirmar subida"
+                uploadBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (myDropzone.getAcceptedFiles().length > 0) {
+                        myDropzone.processQueue(); // Procesa la subida
+
+                        // Limpiar Dropzone una vez que el archivo se sube correctamente
+                        myDropzone.on("success", function () {
+                            setTimeout(function () {
+                                myDropzone.removeAllFiles();  // Limpiar la zona de carga
+                                uploadBtn.disabled = true;    // Deshabilitar el botón nuevamente
+                            }, 500); // Limpiar después de medio segundo
+                        });
+                    }
+                });
+
+                // Eliminar archivo(s) cuando se pulsa el botón "Cancelar"
+                cancelBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    myDropzone.removeAllFiles(); // Elimina todos los archivos subidos
+                    uploadBtn.disabled = true;   // Deshabilitar el botón de confirmación
+                });
+
+                // Reiniciar el botón cuando todos los archivos se eliminen manualmente
+                this.on("removedfile", function () {
+                    if (myDropzone.files.length === 0) {
+                        uploadBtn.disabled = true;
+                    }
+                });
+            }
+        };
+    </script>
+</body>

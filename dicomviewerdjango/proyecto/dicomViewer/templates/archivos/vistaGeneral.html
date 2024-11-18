@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block titulo %} Visualizador {% endblock %}
+
+{% block contenido %}
+<br>
+<div class="text-center mb-4">
+    <h1>Estudio DICOM: {{ id_estudio }}</h1>
+</div>
+
+<div id="imagen_container" style="display: none;">
+    {% for archivo_info in archivos_info %}
+        <img id="imagen_{{ forloop.counter }}" 
+             src="data:image/png;base64,{{ archivo_info.image }}" 
+             style="display: none; max-width: 100%;" 
+             alt="Imagen DICOM {{ archivo_info.instance_number }}"
+             data-instance-number="{{ archivo_info.instance_number }}"
+             data-patient-name="{{ archivo_info.patient_name }}"
+             data-patient-id="{{ archivo_info.patient_id }}"
+             data-patient-sex="{{ archivo_info.patient_sex }}"
+             data-patient-age="{{ archivo_info.patient_age }}"
+             data-institution-name="{{ archivo_info.institution_name }}"
+             data-study-description="{{ archivo_info.study_description }}"
+             data-modality="{{ archivo_info.modality }}"
+             data-study-date="{{ archivo_info.study_date }}"
+             data-study-id="{{ archivo_info.study_id }}"
+             data-protocol-name="{{ archivo_info.protocol_name }}"
+             data-series-number="{{ archivo_info.series_number }}"
+             data-series-description="{{ archivo_info.series_description }}"
+             data-id-bd="{{ archivo_info.id_bd }}">
+    {% endfor %}
+</div>
+
+<br><br>
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h4>Archivo DICOM</h4>
+                            <input type="range" id="slider" min="1" max="{{ archivos_info|length }}" value="1" oninput="cambiarImagen()" class="my-3">
+                            <p>Imagen: <span id="numero_imagen">1</span> de {{ archivos_info|length }}</p>
+                        </div>
+                        <div class="card-body text-center" style="background-color: black;">
+                            <div id="dicom-wrapper" style="position: relative; overflow: hidden; display: inline-block; width: 100%; height: 400px;">
+                                <canvas id="dicom-canvas" width="400" height="400" style="width: 100%; height: 100%; object-fit: contain;"></canvas>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button class="btn btn-secondary" onclick="resetImage()" style="font-size: 1rem; padding: 8px 12px;">Volver al estado inicial</button>
+                        </div>
+                        <!-- Botón de edición dinámico -->
+                        <a id="editar-boton" class="btn btn-warning" href="#" role="button">Ir a edición</a>
+                        <a class="btn btn-secondary" href="{% url 'vistas_ortogonales' id_estudio %}" role="button">Ver Vistas</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h4>Información del archivo DICOM</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <!-- Información dinámica de la imagen -->
+                                <li class="list-group-item"><strong>Número de instancia:</strong> <span id="instance-number"></span></li>
+                                <li class="list-group-item"><strong>Paciente:</strong> <span id="patient-name"></span></li>
+                                <li class="list-group-item"><strong>ID del Paciente:</strong> <span id="patient-id"></span></li>
+                                <li class="list-group-item"><strong>Sexo:</strong> <span id="patient-sex"></span></li>
+                                <li class="list-group-item"><strong>Edad:</strong> <span id="patient-age"></span></li>
+                                <li class="list-group-item"><strong>Institución:</strong> <span id="institution-name"></span></li>
+                                <li class="list-group-item"><strong>Estudio:</strong> <span id="study-description"></span></li>
+                                <li class="list-group-item"><strong>Modalidad:</strong> <span id="modality"></span></li>
+                                <li class="list-group-item"><strong>Fecha del Estudio:</strong> <span id="study-date"></span></li>
+                                <li class="list-group-item"><strong>ID del Estudio:</strong> <span id="study-id"></span></li>
+                                <li class="list-group-item"><strong>Protocolo:</strong> <span id="protocol-name"></span></li>
+                                <li class="list-group-item"><strong>Número de Serie:</strong> <span id="series-number"></span></li>
+                                <li class="list-group-item"><strong>Descripción de la Serie:</strong> <span id="series-description"></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a class="btn btn-secondary" href="{% url 'verEstudios' %}" style="font-size: 1rem; padding: 8px 12px;">Volver a la lista</a>
+            </div>
+            <a class="btn btn-secondary" href="{% url 'vistas_ortogonales' id_estudio %}" role="button">Ver Vistas</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const dicomCanvas = document.getElementById('dicom-canvas');
+    const ctx = dicomCanvas.getContext('2d');
+    const editarBoton = document.getElementById('editar-boton');
+    let currentImage = new Image();
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    function cambiarImagen() {
+        const slider = document.getElementById("slider");
+        const numeroImagen = slider.value;
+        document.getElementById("numero_imagen").innerText = numeroImagen;
+
+        const selectedImage = document.getElementById("imagen_" + numeroImagen);
+        currentImage.src = selectedImage.src;
+
+        // Actualiza la información en la lista de datos
+        document.getElementById("instance-number").textContent = selectedImage.dataset.instanceNumber;
+        document.getElementById("patient-name").textContent = selectedImage.dataset.patientName;
+        document.getElementById("patient-id").textContent = selectedImage.dataset.patientId;
+        document.getElementById("patient-sex").textContent = selectedImage.dataset.patientSex;
+        document.getElementById("patient-age").textContent = selectedImage.dataset.patientAge;
+        document.getElementById("institution-name").textContent = selectedImage.dataset.institutionName;
+        document.getElementById("study-description").textContent = selectedImage.dataset.studyDescription;
+        document.getElementById("modality").textContent = selectedImage.dataset.modality;
+        document.getElementById("study-date").textContent = selectedImage.dataset.studyDate;
+        document.getElementById("study-id").textContent = selectedImage.dataset.studyId;
+        document.getElementById("protocol-name").textContent = selectedImage.dataset.protocolName;
+        document.getElementById("series-number").textContent = selectedImage.dataset.seriesNumber;
+        document.getElementById("series-description").textContent = selectedImage.dataset.seriesDescription;
+
+        // Actualiza el enlace del botón de edición con el ID de la imagen actual
+        editarBoton.href = `{% url 'editar_archivo' 0 id_estudio %}`.replace('0', selectedImage.dataset.idBd);
+
+        currentImage.onload = resetImage;
+    }
+
+    function resetImage() {
+        scale = 1;
+        offsetX = 0;
+        offsetY = 0;
+        ctx.clearRect(0, 0, dicomCanvas.width, dicomCanvas.height);
+        ctx.drawImage(currentImage, 0, 0, dicomCanvas.width, dicomCanvas.height);
+    }
+
+    cambiarImagen(); // Llamada inicial
+</script>
+
+{% endblock %}

@@ -16,7 +16,7 @@
                     <h4 class="card-title">Lista de archivos DICOM</h4>
 
                     <!-- Formulario para los filtros -->
-                    <form method="GET" action="{% url 'archivos' %}" class="mb-3">
+                    <form method="GET" action="{% url 'verListado' pk=id_estudio %}" class="mb-3">
                         <div class="row">
                             <div class="col-md-4">
                                 <input type="text" name="study_id" class="form-control" placeholder="Filtrar por ID de estudio" value="{{ request.GET.study_id }}">
@@ -53,16 +53,19 @@
                                     <td>{{ archivo_info.study_date }}</td>
                                     <td>
                                         <!-- Botón de eliminar -->
-                                        <form action="{% url 'eliminar_archivo' archivo_info.archivo.pk %}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este archivo?');">
+                                        <form action="{% url 'eliminar_archivo' archivo_info.archivo.pk id_estudio %}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este archivo?');">
                                             {% csrf_token %}
                                             <button type="submit" class="btn btn-danger">Eliminar</button>
                                         </form>
 
                                         <!-- Botón de ver imagen -->
-                                        <a class="btn btn-primary" href="{% url 'verArchivo' archivo_info.archivo.pk %}" role="button">Ver imagen</a>
+                                        <a class="btn btn-primary" href="{% url 'verArchivo' archivo_info.archivo.pk id_estudio %}" role="button">Ver cabecera</a>
 
                                         <!-- Botón de editar -->
-                                        <a class="btn btn-warning" href="{% url 'editar_archivo' archivo_info.archivo.pk %}" role="button">Editar</a>
+                                        <a class="btn btn-warning" href="{% url 'editar_archivo' archivo_info.archivo.pk id_estudio %}" role="button">Ir a edición</a>
+
+                                        <!-- Botón para ver vistas ortogonales -->
+                                       
                                     </td>
                                 </tr>
                                 {% empty %}

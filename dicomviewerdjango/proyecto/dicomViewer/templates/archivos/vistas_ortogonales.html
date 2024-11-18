@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block titulo %}Vistas Ortopédicas del Archivo DICOM{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <!-- Vista Coronal -->
+        <div class="col-md-4">
+            <div class="card" style="height: 100%;">
+                <div class="card-body">
+                    <h3 class="card-title">Vista Coronal</h3>
+                    <input type="range" id="slider_coronal" min="1" max="{{ coronal_images|length }}" value="1" oninput="cambiarImagen('coronal')" class="my-3">
+                    <p>Imagen Coronal: <span id="numero_imagen_coronal">1</span> de {{ coronal_images|length }}</p>
+
+                    <!-- Contenedor para la imagen visible de la vista coronal -->
+                    <div id="imagen_visible_coronal" class="d-flex justify-content-center align-items-center" style="height: 300px; overflow: hidden;">
+                        <img id="currentImage_coronal" src="data:image/png;base64,{{ coronal_images.0.image }}" class="card-img-top" style="max-height: 100%; width: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista Axial -->
+        <div class="col-md-4">
+            <div class="card" style="height: 100%;">
+                <div class="card-body">
+                    <h3 class="card-title">Vista Axial</h3>
+                    <input type="range" id="slider_axial" min="1" max="{{ axial_images|length }}" value="1" oninput="cambiarImagen('axial')" class="my-3">
+                    <p>Imagen Axial: <span id="numero_imagen_axial">1</span> de {{ axial_images|length }}</p>
+
+                    <!-- Contenedor para la imagen visible de la vista axial -->
+                    <div id="imagen_visible_axial" class="d-flex justify-content-center align-items-center" style="height: 300px; overflow: hidden;">
+                        <img id="currentImage_axial" src="data:image/png;base64,{{ axial_images.0.image }}" class="card-img-top" style="max-height: 100%; width: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vista Sagital -->
+        <div class="col-md-4">
+            <div class="card" style="height: 100%;">
+                <div class="card-body">
+                    <h3 class="card-title">Vista Sagital</h3>
+                    <input type="range" id="slider_sagittal" min="1" max="{{ sagittal_images|length }}" value="1" oninput="cambiarImagen('sagittal')" class="my-3">
+                    <p>Imagen Sagital: <span id="numero_imagen_sagittal">1</span> de {{ sagittal_images|length }}</p>
+
+                    <!-- Contenedor para la imagen visible de la vista sagital -->
+                    <div id="imagen_visible_sagittal" class="d-flex justify-content-center align-items-center" style="height: 300px; overflow: hidden;">
+                        <img id="currentImage_sagittal" src="data:image/png;base64,{{ sagittal_images.0.image }}" class="card-img-top" style="max-height: 100%; width: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedores ocultos para las imágenes de cada vista -->
+    <div id="imagen_container_coronal" style="display: none;">
+        {% for coronal_image in coronal_images %}
+            <img id="imagen_coronal_{{ forloop.counter }}" 
+                 src="data:image/png;base64,{{ coronal_image }}" 
+                 style="display: none; max-width: 100%;" 
+                 data-instance-number="{{ coronal_image.instance_number }}">
+        {% endfor %}
+    </div>
+    
+    <div id="imagen_container_axial" style="display: none;">
+        {% for axial_image in axial_images %}
+            <img id="imagen_axial_{{ forloop.counter }}" 
+                 src="data:image/png;base64,{{ axial_image }}" 
+                 style="display: none; max-width: 100%;" 
+                 data-instance-number="{{ axial_image.instance_number }}">
+        {% endfor %}
+    </div>
+
+    <div id="imagen_container_sagittal" style="display: none;">
+        {% for sagittal_image in sagittal_images %}
+            <img id="imagen_sagittal_{{ forloop.counter }}" 
+                 src="data:image/png;base64,{{ sagittal_image }}" 
+                 style="display: none; max-width: 100%;" 
+                 data-instance-number="{{ sagittal_image.instance_number }}">
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    // Función para actualizar la imagen según el deslizador
+    function cambiarImagen(view) {
+        let slider, numeroImagen, currentImage, selectedImage;
+        let imagenContainer, imagenNumber;
+
+        // Determinar cuál slider y contenedor de imágenes usar
+        if (view === 'coronal') {
+            slider = document.getElementById("slider_coronal");
+            numeroImagen = document.getElementById("numero_imagen_coronal");
+            currentImage = document.getElementById("currentImage_coronal");
+            imagenContainer = document.getElementById("imagen_container_coronal");
+            imagenNumber = "imagen_coronal_";
+        } else if (view === 'axial') {
+            slider = document.getElementById("slider_axial");
+            numeroImagen = document.getElementById("numero_imagen_axial");
+            currentImage = document.getElementById("currentImage_axial");
+            imagenContainer = document.getElementById("imagen_container_axial");
+            imagenNumber = "imagen_axial_";
+        } else if (view === 'sagittal') {
+            slider = document.getElementById("slider_sagittal");
+            numeroImagen = document.getElementById("numero_imagen_sagittal");
+            currentImage = document.getElementById("currentImage_sagittal");
+            imagenContainer = document.getElementById("imagen_container_sagittal");
+            imagenNumber = "imagen_sagittal_";
+        }
+
+        // Obtener el valor del slider
+        const numero = slider.value;
+        numeroImagen.innerText = numero;
+
+        // Obtener la imagen seleccionada
+        selectedImage = document.getElementById(imagenNumber + numero);
+
+        // Mostrar la imagen seleccionada en el contenedor visible
+        currentImage.src = selectedImage.src;
+    }
+
+    // Llamada inicial para establecer la imagen al cargar la página
+    cambiarImagen('coronal');
+    cambiarImagen('axial');
+    cambiarImagen('sagittal');
+</script>
+
+{% endblock %}
